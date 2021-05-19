@@ -134,12 +134,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glew.lib;opengl32.lib;assimp-vc142-mt.lib;assimpd.lib;zlibd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc142-mt.lib;assimpd.lib;zlibd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not exist ".\bin\$(Platform)\$(Configuration)\assimpd.exe" copy ".\Dependencies\lib\$(Configuration)\assimpd.exe" ".\bin\$(Platform)\$(Configuration)\assimpd.exe"
-if not exist ".\bin\$(Platform)\$(Configuration)\zlibd.dll" copy ".\Dependencies\lib\$(Configuration)\zlibd.dll" ".\bin\$(Platform)\$(Configuration)\zlibd.dll"
-if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencies\lib\glew32.dll" ".\bin\$(Platform)\$(Configuration)\glew32.dll"</Command>
+if not exist ".\bin\$(Platform)\$(Configuration)\zlibd.dll" copy ".\Dependencies\lib\$(Configuration)\zlibd.dll" ".\bin\$(Platform)\$(Configuration)\zlibd.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -157,16 +156,17 @@ if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencie
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glew.lib;opengl32.lib;assimp-vc142-mt.lib;assimp.lib;zlib.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc142-mt.lib;assimp.lib;zlib.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not exist ".\bin\$(Platform)\$(Configuration)\assimp.exe" copy ".\Dependencies\lib\$(Configuration)\assimp.exe" ".\bin\$(Platform)\$(Configuration)\assimp.exe"
 if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\lib\$(Configuration)\zlib.dll" ".\bin\$(Platform)\$(Configuration)\zlib.dll"
-if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencies\lib\glew32.dll" ".\bin\$(Platform)\$(Configuration)\glew32.dll"</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
