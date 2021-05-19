@@ -139,7 +139,7 @@
     <PostBuildEvent>
       <Command>if not exist ".\bin\$(Platform)\$(Configuration)\assimpd.exe" copy ".\Dependencies\lib\$(Configuration)\assimpd.exe" ".\bin\$(Platform)\$(Configuration)\assimpd.exe"
 if not exist ".\bin\$(Platform)\$(Configuration)\zlibd.dll" copy ".\Dependencies\lib\$(Configuration)\zlibd.dll" ".\bin\$(Platform)\$(Configuration)\zlibd.dll"
-</Command>
+if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencies\lib\glew32.dll" ".\bin\$(Platform)\$(Configuration)\glew32.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
