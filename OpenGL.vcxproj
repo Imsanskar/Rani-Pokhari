@@ -162,7 +162,7 @@ if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencie
     <PostBuildEvent>
       <Command>if not exist ".\bin\$(Platform)\$(Configuration)\assimp.exe" copy ".\Dependencies\lib\$(Configuration)\assimp.exe" ".\bin\$(Platform)\$(Configuration)\assimp.exe"
 if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\lib\$(Configuration)\zlib.dll" ".\bin\$(Platform)\$(Configuration)\zlib.dll"
-</Command>
+if not exist ".\bin\$(Platform)\$(Configuration)\glew32.dll" copy ".\Dependencies\lib\glew32.dll" ".\bin\$(Platform)\$(Configuration)\glew32.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
