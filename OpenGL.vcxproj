@@ -177,7 +177,6 @@ if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertxBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Camera.h" />
