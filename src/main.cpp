@@ -10,6 +10,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <CubeMap.h>
 
 int main() {
 	Renderer renderer;
@@ -111,7 +112,7 @@ int main() {
 
 	VertexBuffer vertexBuffer(data, sizeof(data));
 	IndexBuffer indexBuffer(indices, sizeof(indices));
-	Shader shader("./resources/shaders/main.shader");
+	Shader shader("../../../resources/shaders/main.shader");
 
 	VertexArray va;
 	VertexBufferLayout layout;
@@ -119,24 +120,87 @@ int main() {
 	layout.push<float>(2);
 	va.addBuffer(vertexBuffer, layout);
 
-	Textures water("./resources/textures/water.jpg");
+	Texture water("../../../resources/textures/water.jpg");
 	glCheckError(water.bind(0));
 
+
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	const CubeMap skyBox(std::vector<std::string>{
+			"../../../resources/skybox/right.jpg",
+			"../../../resources/skybox/left.jpg",
+			"../../../resources/skybox/top.jpg",
+			"../../../resources/skybox/bottom.jpg",
+			"../../../resources/skybox/front.jpg",
+			"../../../resources/skybox/back.jpg"});
+
+	Shader skyBoxShader("../../../resources/shaders/cubeMap.shader");
+	skyBoxShader.bind();
+	VertexBuffer skyBoxVB(skyboxVertices, sizeof(skyboxVertices));
+	VertexBufferLayout skyBoxLayout;
+	skyBoxLayout.push<float>(3);
+	VertexArray skyBoxVA;
+	skyBoxVA.addBuffer(skyBoxVB, skyBoxLayout);
+
 	shader.bind();
-
-	glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.5f / 2, 1.5f / 2, -10.0f, 10.0f);
-
+	//projection matrix
 	glm::mat4 projection;
 	float fov = 45.0f;
 	projection = glm::perspective(glm::radians(fov), (float)width / (float) height, 0.0001f, 100.0f);
 	shader.setUniform("projection", projection);
 
+	//skybox shader uniform
+	skyBoxShader.bind();
+	shader.setUniform("projection", projection);
 
+	//camera
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	Camera camera(cameraPos, cameraFront, cameraUp);
-
 	renderer.camera = camera;
 
 	glEnable(GL_DEPTH_TEST);
@@ -149,6 +213,18 @@ int main() {
 		//renderer.clear(0.3f, 0.5f, 0.3f, 0.5f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+		glDepthMask(GL_FALSE);
+		skyBoxShader.bind();
+		glm::mat4 view = glm::mat4(glm::mat3(renderer.camera.GetLookAtMatrix()));
+		skyBoxShader.setUniform("view", view);
+		skyBoxShader.setUniform("projection", projection);
+		skyBox.bind();
+		renderer.draw(skyBoxVA, skyBoxShader, 36);
+		glDepthMask(GL_TRUE);
+
+
+		shader.bind();
 		float timeValue = (float)glfwGetTime();
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 		float redValue = (cos(timeValue) / 2.0f) + 0.5f;
@@ -159,10 +235,8 @@ int main() {
 		/*glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		shader.setUniform("model", model);*/
-
+		view = renderer.camera.GetLookAtMatrix();
 		projection = glm::perspective(glm::radians(context.fov), 800.0f / 600.0f, 0.1f, 100.0f);
-		
-
 		for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 trans = glm::mat4(1.0f);
@@ -176,15 +250,9 @@ int main() {
 
 			shader.setUniform("projection", projection);
 
-			glm::mat4 view = renderer.camera.GetLookAtMatrix();
 			shader.setUniform("view", view);
-
 			renderer.draw(va, shader, 36);
 		}
-
-		//shader.setUniform("transform", trans);
-		//renderer.draw(va, indexBuffer, shader);
-		renderer.draw(va, shader, 36);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

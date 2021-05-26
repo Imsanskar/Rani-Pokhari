@@ -1,41 +1,51 @@
 #include <Textures.h>
 
 
-Textures::Textures(std::string _filePath):textureID(0){
-	filePath = _filePath;
-
+Texture::Texture(const unsigned int _target){
 	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	target = _target;
+}
 
-	stbi_set_flip_vertically_on_load(1);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+void Texture::loadTexture(std::string filePath, GLenum texTarget){
+	//glGenTextures(1, &textureID);
+	glBindTexture(target, textureID);
 
 	int nrChannels;
+	int height, width;
 	data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
 
 	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}else {
-		std::cout << "Failed to load texture" << std::endl;
+		glTexImage2D(texTarget, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		if(target == GL_TEXTURE_2D)
+			glGenerateMipmap(target);
 	}
+	else {
+		std::cout << "Failed to load texture " << filePath <<std::endl;
+	}
+
+	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	//free the data
 	stbi_image_free(data);
 }
 
-void Textures::bind(const int slot) const{
+Texture::Texture(std::string filePath, const unsigned int _target):textureID(0), target(_target){
+	loadTexture(filePath);
+}
+
+void Texture::bind(const int slot) const{
 	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(target, textureID);
 }
 
-void Textures::unbind(){
-	glBindTexture(GL_TEXTURE_2D, 0);
+void Texture::unbind(){
+	glBindTexture(target, 0);
 }
 
-Textures::~Textures(){
+Texture::~Texture(){
 	glDeleteTextures(1, &textureID);
 }

@@ -108,7 +108,7 @@ void Renderer::draw(const VertexArray& va, const Shader& shader, unsigned int ve
     va.bind();
     shader.bind();
 
-    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    glCheckError(glDrawArrays(GL_TRIANGLES, 0, vertexCount));
 }
 
 void Renderer::processKeyboardInput(GLFWwindow* window){
