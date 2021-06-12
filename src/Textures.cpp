@@ -6,8 +6,15 @@ Texture::Texture(const unsigned int _target){
 	target = _target;
 }
 
+Texture::Texture(std::string path, std::string _type){
+	type = _type;
+	loadTexture(path);
+	this->path = path;
+}
+
 void Texture::loadTexture(std::string filePath, GLenum texTarget){
 	//glGenTextures(1, &textureID);
+	path = filePath;
 	glBindTexture(target, textureID);
 
 	int nrChannels;

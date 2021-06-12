@@ -8,8 +8,12 @@ struct Texture {
 	unsigned int textureID;
 	unsigned char* data;
 	unsigned int target;
-	
+	std::string type;
+	std::string path;
+
 	Texture(const unsigned int _target = GL_TEXTURE_2D);
+
+	Texture(std::string path, std::string type);
 
 	void loadTexture(std::string path, GLenum texTarget = GL_TEXTURE_2D);
 
@@ -18,6 +22,10 @@ struct Texture {
 	void bind(const int slot = 0) const;
 
 	void unbind();
+
+	std::string getType() const {
+		return type;
+	}
 
 	~Texture();
 };

@@ -34,6 +34,10 @@ struct Shader {
 
 	void setUniform(std::string name, float v0, float v1, float v2, float v3);
 	
+	void setUniform(std::string name, float v0, float v1, float v2);
+
+	void setUniform(std::string name, glm::vec3 vec);
+
 	void setUniform(std::string name, glm::mat4 transform);
 
 	int GetUniformLocation(std::string& name);

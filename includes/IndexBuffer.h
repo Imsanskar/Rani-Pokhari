@@ -6,7 +6,7 @@ struct IndexBuffer {
 	int count;
 	IndexBuffer(const void* data, unsigned int size);
 
-	~IndexBuffer();
+	//~IndexBuffer();
 
 	void bind()const;
 
