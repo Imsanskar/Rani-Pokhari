@@ -10,6 +10,7 @@ struct Texture {
 	unsigned int target;
 	std::string type;
 	std::string path;
+	GLenum format;
 
 	Texture(const unsigned int _target = GL_TEXTURE_2D);
 
@@ -21,7 +22,7 @@ struct Texture {
 
 	void bind(const int slot = 0) const;
 
-	void unbind();
+	void unbind() const;
 
 	std::string getType() const {
 		return type;
