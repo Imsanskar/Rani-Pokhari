@@ -33,22 +33,22 @@ void Mesh::setupMesh(){
 }
 
 
-void Mesh::draw(Shader& shader) const{
+void Mesh::draw(Shader& shader, bool isTextureModel) const{
     // bind appropriate textures
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
 
 	shader.bind();
-	shader.setUniform("material.ambient", material.ambient);
-	shader.setUniform("material.diffuse", material.diffuse);
-	shader.setUniform("material.specular", material.specular);
-	shader.setUniform("material.shininess", 32.0f);
-
-
+	 if(!isTextureModel){
+		 shader.setUniform("material.ambient", material.ambient);
+		 shader.setUniform("material.diffuse", material.diffuse);
+		 shader.setUniform("material.specular", material.specular);
+		 shader.setUniform("material.shininess", 32.0f);
+	 }
     for (unsigned int i = 0; i < textures.size(); ++i){
 		glActiveTexture(GL_TEXTURE0 + i);
         // retrieve texture number (the N in diffuse_textureN)
-        std::string number;
+		std::string number;
         const std::string& textureType = textures[i].getType();
 
         if (textureType == "diffuse")
@@ -58,8 +58,8 @@ void Mesh::draw(Shader& shader) const{
         else
             continue;
         shader.setUniform(("material." + textureType + number), static_cast<int>(i));
-        glCheckError(textures[i].bind(i));
-    }
+		glCheckError(textures[i].bind(i));
+	}
 
 	glCheckError(vao.bind());
 	glCheckError(vbo.bind());

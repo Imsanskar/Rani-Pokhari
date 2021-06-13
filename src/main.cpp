@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+﻿#include <glad/glad.h>
 #include <iostream>
 #include "Renderer.h"
 #include <glm/glm.hpp>
@@ -6,12 +6,20 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <CubeMap.h>
 #include <Model.h>
+#include <tchar.h>
+#include <windows.h>
+#include <Lmcons.h>
+
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+
 
 
 int main() {
@@ -41,11 +49,14 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwMakeContextCurrent(window);
 	
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
+	std::cout << "Graphics card:" << rendererData << std::endl;
 	
 	float c = 0.5f;
 	
@@ -262,8 +273,8 @@ int main() {
 
 	//model
 	Shader modelShader("../../../resources/shaders/model.glsl");
-	//Model ictc("../../../resources/models/car/Lamborghini_Aventador.fbx");
-	Model ictc("../../../resources/models/Gajur/Gajur.obj");
+	Model gajur("../../../resources/models/Gajur/Gajur.obj");
+
 
 	while (!glfwWindowShouldClose(window)) {
 		renderer.clear(1.0f, 0.0f, 1.0f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -278,16 +289,16 @@ int main() {
 		skyBox.bind();
 		renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
+		skyBoxShader.unbind();
 		
-		
+
+		//shader 
 		shader.bind();
 		float timeValue = (float)glfwGetTime();
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 		float redValue = (cos(timeValue) / 2.0f) + 0.5f;
 		float blueValue = sin(timeValue) / 2.0f + 0.5f;
-		
 		shader.setUniform("view", renderer.camera.GetLookAtMatrix());
-		
 		view = renderer.camera.GetLookAtMatrix();
 		projection = glm::perspective(glm::radians(context.fov), aspectRatio, 0.1f, 1000.0f);
 		glm::mat4 trans = glm::mat4(1.0f);
@@ -296,28 +307,51 @@ int main() {
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, cubePositions[1]);
 		float angle = 0.0f;
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
 
-		//set uniforms
-		//shader.setUniform("transform", trans);
-		shader.setUniform("model", model);
-		shader.setUniform("projection", projection);
-		shader.setUniform("view", view);
-		/*
-		shader.setUniform("lightColor", 1.0f, 1.0f, 1.0f);
-		shader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
-		*/
-		shader.setUniform("lightPos", cubePositions[0]);
-		shader.setUniform("viewPos", camera.cameraPosition);
-		shader.setUniform("material.ambient", 0.0f, 0.5f, 0.31f);
-		shader.setUniform("material.diffuse", 1.0f, 0.5f, 0.31f);
-		shader.setUniform("material.specular", 1.0f, 0.5f, 0.5f);
-		shader.setUniform("material.shininess", 32.0f);
-		shader.setUniform("light.ambient", 0.8f, 0.2f, 0.2f);
-		shader.setUniform("light.diffuse", 1.0f, 0.5f, 0.5f); // darken diffuse light a bit
-		shader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		//renderer.draw(va, shader, 36);
+		////set uniforms
+		////shader.setUniform("transform", trans);
+		//shader.setUniform("model", model);
+		//shader.setUniform("projection", projection);
+		//shader.setUniform("view", view);
+		///*
+		//shader.setUniform("lightColor", 1.0f, 1.0f, 1.0f);
+		//shader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
+		//*/
+		//shader.setUniform("lightPos", cubePositions[0]);
+		//shader.setUniform("viewPos", camera.cameraPosition);
+		//shader.setUniform("material.ambient", 0.0f, 0.5f, 0.31f);
+		//shader.setUniform("material.diffuse", 1.0f, 0.5f, 0.31f);
+		//shader.setUniform("material.specular", 1.0f, 0.5f, 0.5f);
+		//shader.setUniform("material.shininess", 32.0f);
+		//shader.setUniform("light.ambient", 0.8f, 0.2f, 0.2f);
+		//shader.setUniform("light.diffuse", 1.0f, 0.5f, 0.5f); // darken diffuse light a bit
+		//shader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+		////renderer.draw(va, shader, 36);
+		//shader.unbind();ate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+
+		////set uniforms
+		////shader.setUniform("transform", trans);
+		//shader.setUniform("model", model);
+		//shader.setUniform("projection", projection);
+		//shader.setUniform("view", view);
+		///*
+		//shader.setUniform("lightColor", 1.0f, 1.0f, 1.0f);
+		//shader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
+		//*/
+		//shader.setUniform("lightPos", cubePositions[0]);
+		//shader.setUniform("viewPos", camera.cameraPosition);
+		//shader.setUniform("material.ambient", 0.0f, 0.5f, 0.31f);
+		//shader.setUniform("material.diffuse", 1.0f, 0.5f, 0.31f);
+		//shader.setUniform("material.specular", 1.0f, 0.5f, 0.5f);
+		//shader.setUniform("material.shininess", 32.0f);
+		//shader.setUniform("light.ambient", 0.8f, 0.2f, 0.2f);
+		//shader.setUniform("light.diffuse", 1.0f, 0.5f, 0.5f); // darken diffuse light a bit
+		//shader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+		////renderer.draw(va, shader, 36);
+		//shader.unbind();
 
 		lampShader.bind();
 		model = glm::mat4(1.0f);
@@ -325,23 +359,26 @@ int main() {
 		lampShader.setUniform("model", model);
 		lampShader.setUniform("projection", projection);
 		lampShader.setUniform("view", view);
-
+		lampShader.unbind();
 		//renderer.draw(va, lampShader, 36);
+
+
 
 		modelShader.bind();
 		trans = glm::mat4(0.5f);
 		//trans = glm::rotate(trans, (float)timeValue, glm::vec3(0.0f, 1.0f, 0.0f));
 		trans = glm::scale(trans, glm::vec3(0.2f, 0.2f, 0.2f));
 		trans = glm::translate(trans, glm::vec3(0.0f, -0.4f, 0.0f));
-		glCheckError(modelShader.setUniform("trans", trans));
-		glCheckError(modelShader.setUniform("model", model));
-		glCheckError(modelShader.setUniform("projection", projection));
-		glCheckError(modelShader.setUniform("view", view));
+		modelShader.setUniform("trans", trans);
+		modelShader.setUniform("model", model);
+		modelShader.setUniform("projection", projection);
+		modelShader.setUniform("view", view);
 		modelShader.setUniform("viewPos", camera.cameraPosition);
 		modelShader.setUniform("light.ambient", 0.4f, 0.4f, 0.2f);
 		modelShader.setUniform("light.diffuse", 1.0f, 1.0f, 1.0f); // darken diffuse light a bit
 		modelShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		glCheckError(ictc.render(modelShader));
+		gajur.render(modelShader, false);
+		modelShader.unbind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

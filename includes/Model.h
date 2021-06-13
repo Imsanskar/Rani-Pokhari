@@ -14,7 +14,7 @@ struct Model {
 
 	void loadModel(std::string path);
 
-	void render(Shader& shader);
+	void render(Shader& shader, bool isTexture = true);
 
 private:
 	void processNode(aiNode* node, const aiScene* scene);

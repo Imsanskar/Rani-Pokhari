@@ -37,5 +37,5 @@ struct Mesh {
 
     void setupMesh();
 
-    void draw(Shader& shader) const;
+    void draw(Shader& shader, bool isTextureModel = true) const;
 };
