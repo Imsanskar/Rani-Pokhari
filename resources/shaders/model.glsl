@@ -8,10 +8,10 @@ out vec2 TexCoords;
 out vec3 normal;
 out vec3 FragPos;
 
+uniform mat4 trans;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 trans;
 
 void main()
 {
@@ -87,6 +87,5 @@ void main()
 
     vec3 result = (ambient + diffuse + specular);
     //FragColor = texture(texture1, TexCoord);
-    FragColor = vec4(result, 1.0f);
-    //FragColor = texture(texture1, TexCoord) * vec4(result, 1.0f);
+    FragColor = vec4(result, 1.0f);;
 }
