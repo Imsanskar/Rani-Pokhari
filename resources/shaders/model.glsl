@@ -1,5 +1,5 @@
 #shader vertex
-#version 330 core
+#version 440 core
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aTexCoords;
@@ -17,15 +17,16 @@ void main()
 {
     TexCoords = aTexCoords;
     gl_Position = projection * view * model * trans * vec4(aPos, 1.0);
-    //TexCoord = aTexCoord;
-    normal = aNormal;
-    //normal = aNormal;
+    normal = mat3(transpose(inverse(model))) * aNormal;
     FragPos = vec3(model * vec4(aPos, 1.0));
 }
 
 
 #shader fragment
-#version 330 core
+#version 440 core
+in vec2 TexCoords;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
 
 struct Material {
     vec3 ambient;
@@ -49,24 +50,21 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 normal;
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-
 uniform vec3 lightPos;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform Material material;
 
 
-in vec3 FragPos;
-
 //specular lighting
 uniform vec3 viewPos;
+in vec3 FragPos;
 
-void main()
-{
+void main() {
+
     //ambient
     float ambientStrength = 0.1;
+    vec3 lig = vec3(1.0f);
     vec3 ambient = light.ambient * material.ambient;
 
     //diffuse
@@ -83,9 +81,6 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * (spec * material.specular);
 
-
-
     vec3 result = (ambient + diffuse + specular);
-    //FragColor = texture(texture1, TexCoord);
-    FragColor = vec4(result, 1.0f);;
+    FragColor = texture(texture_diffuse1, TexCoords) * vec4(result, 1.0f);
 }

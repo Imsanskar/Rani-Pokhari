@@ -1,4 +1,4 @@
-#include "..\includes\Mesh.h"
+#include "Mesh.h"
 
 Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures, Material _material)
 	:vertices(_vertices),
@@ -36,7 +36,9 @@ void Mesh::setupMesh(){
 void Mesh::draw(Shader& shader, bool isTextureModel) const{
     // bind appropriate textures
     unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
+	unsigned int specularNr = 1;
+	unsigned int heightNr = 1;
+	unsigned int normalNr = 1;
 
 	shader.bind();
 	 if(!isTextureModel){
@@ -51,18 +53,22 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 		std::string number;
         const std::string& textureType = textures[i].getType();
 
-        if (textureType == "diffuse")
+        if (textureType == "texture_diffuse")
             number = std::to_string(diffuseNr++);
-        else if (textureType == "specular")
+        else if (textureType == "texture_specular")
             number = std::to_string(specularNr++); // transfer unsigned int to stream
+		else if (textureType == "texture_normal")
+			number = std::to_string(normalNr++); // transfer unsigned int to stream
+		else if (textureType == "texture_height")
+			number = std::to_string(heightNr++); // transfer unsigned int to stream
         else
             continue;
-        shader.setUniform(("material." + textureType + number), static_cast<int>(i));
+		//shader.setUniform(("texture_diffuse" + number), static_cast<int>(i));
+		//shader.setUniform(("texture_diffuse" + number), static_cast<int>(i));
 		glCheckError(textures[i].bind(i));
 	}
-
 	glCheckError(vao.bind());
-	glCheckError(vbo.bind());
-	glCheckError(ibo.bind());
 	glCheckError(glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL));
+
+	glActiveTexture(GL_TEXTURE0);
 }
