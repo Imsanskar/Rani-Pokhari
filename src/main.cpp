@@ -72,7 +72,7 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-	if (strcmp(infoBuf, "imsanskar") != 0) {
+	if (strcmp(infoBuf, "imsanskar") == 0) {
 		std::string str((char*)vendor);
 		if (str.find("NVIDIA") == std::string::npos) {
 			std::cout << "Use nvidia card unless you want to get bsod";
@@ -196,9 +196,9 @@ int main() {
 
 	VertexBuffer vertexBuffer(data, sizeof(data));
 	IndexBuffer indexBuffer(indices, sizeof(indices));
-	Shader shader("../../../resources/shaders/main.shader");
+	Shader lightShader("../../../resources/shaders/light.glsl");
 	Shader lampShader("../../../resources/shaders/lamp.glsl");
-
+	
 
 	VertexArray va;
 	VertexBufferLayout layout;
@@ -271,17 +271,15 @@ int main() {
 	VertexArray skyBoxVA;
 	skyBoxVA.addBuffer(skyBoxVB, skyBoxLayout);
 
-	shader.bind();
+	
 	//projection matrix
 	glm::mat4 projection;
 	float fov = 45.0f;
 	projection = glm::perspective(glm::radians(fov), (float)width / (float)height, 0.0001f, 100.0f);
-	shader.setUniform("projection", projection);
-
+	
 	//skybox shader uniform
 	skyBoxShader.bind();
-	shader.setUniform("projection", projection);
-
+	
 	//camera
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -307,6 +305,7 @@ int main() {
 		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glDepthMask(GL_FALSE);
+		//skybox
 		skyBoxShader.bind();
 		glm::mat4 view = glm::mat4(glm::mat3(renderer.camera.GetLookAtMatrix()));
 		skyBoxShader.setUniform("view", view);
@@ -316,37 +315,35 @@ int main() {
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
-
-		//shader 
-		shader.bind();
+		//setting for models
+		float angle = 0.0f;
 		float timeValue = (float)glfwGetTime();
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 		float redValue = (cos(timeValue) / 2.0f) + 0.5f;
 		float blueValue = sin(timeValue) / 2.0f + 0.5f;
-		shader.setUniform("view", renderer.camera.GetLookAtMatrix());
 		view = renderer.camera.GetLookAtMatrix();
 		projection = glm::perspective(glm::radians(context.fov), aspectRatio, 0.1f, 1000.0f);
 		glm::mat4 trans = glm::mat4(1.0f);
 		trans = glm::rotate(trans, (float)timeValue, glm::vec3(0.0f, 1.0f, 0.0f));
-		// calculate the model matrix for each object and pass it to shader before drawing
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		model = glm::translate(model, cubePositions[1]);
-		float angle = 0.0f;
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		shader.unbind();
-
-		lampShader.bind();
-		model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[0]);
-		lampShader.setUniform("model", model);
-		lampShader.setUniform("projection", projection);
-		lampShader.setUniform("view", view);
-		lampShader.unbind();
-		//renderer.draw(va, lampShader, 36);
+		
+		
 
-
-		modelShader.bind();
+		////property of sun or lamp
+		//lampShader.bind();
+		//model = glm::mat4(1.0f);
 		//model = glm::translate(model, cubePositions[1]);
+		//lampShader.setUniform("model", model);
+		//lampShader.setUniform("projection", projection);
+		//lampShader.setUniform("view", view);
+		//lampShader.setUniform("lightColour", 1.0f,1.0f,1.0f);
+		//lampShader.unbind();
+		////renderer.draw(va, lampShader, 36);
+
+		//model loading
+		model = glm::translate(model, cubePositions[0]);
+		modelShader.bind();		
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = glm::mat4(1.0f);
@@ -357,14 +354,29 @@ int main() {
 		modelShader.setUniform("model", model);
 		modelShader.setUniform("projection", projection);
 		modelShader.setUniform("view", view);
-		modelShader.setUniform("viewPos", camera.cameraPosition);
-		modelShader.setUniform("lightPos", 0.0f, 0.0f, 10.0f);
-		modelShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
-		modelShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
-		modelShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 		//ictc.render(modelShader, false);
 		glCheckError(ictc.render(modelShader, false));
 		modelShader.unbind();
+
+
+		//ligtening
+		lightShader.bind();
+		model = glm::translate(model, cubePositions[0]);
+		lightShader.setUniform("model", model);
+		lightShader.setUniform("projection", projection);
+		lightShader.setUniform("view", view);
+		//property of light
+		lightShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
+		lightShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+		lightShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+		lightShader.setUniform("light.position", 0.0f, 0.0f, 12.0f);
+		//property of material
+		lightShader.setUniform("material.ambient", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.diffuse", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.specular", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.shininess", 32.0f);
+		lightShader.setUniform("viewPos", camera.cameraPosition);
+		lightShader.unbind();
 
 
 		glfwSwapBuffers(window);
