@@ -1,4 +1,4 @@
-﻿#include <glad/glad.h>
+#include <glad/glad.h>
 #include <iostream>
 #include "Renderer.h"
 #include <glm/glm.hpp>
@@ -333,6 +333,7 @@ int main() {
 		
 		
 
+
 		////renderer.draw(va, lampShader, 36);
 
 		////model loading
@@ -359,7 +360,6 @@ int main() {
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
 		trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
-		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
@@ -390,6 +390,26 @@ int main() {
 		//glCheckError(sun.render(lampShader, false));
 		//lampShader.unbind();
 
+
+
+		//ligtening
+		lightShader.bind();
+		model = glm::translate(model, cubePositions[0]);
+		lightShader.setUniform("model", model);
+		lightShader.setUniform("projection", projection);
+		lightShader.setUniform("view", view);
+		//property of light
+		lightShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
+		lightShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+		lightShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+		lightShader.setUniform("light.position", 0.0f, 0.0f, 12.0f);
+		//property of material
+		lightShader.setUniform("material.ambient", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.diffuse", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.specular", 0.5f, 0.5f, 0.5f);
+		lightShader.setUniform("material.shininess", 32.0f);
+		lightShader.setUniform("viewPos", camera.cameraPosition);
+		lightShader.unbind();
 
 
 		glfwSwapBuffers(window);
