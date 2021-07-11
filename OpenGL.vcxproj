@@ -197,12 +197,18 @@ if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="resources\models\untitled.mtl" />
     <None Include="resources\shaders\cubeMap.shader" />
     <None Include="resources\shaders\lamp.glsl" />
     <None Include="resources\shaders\light.glsl" />
+    <None Include="resources\shaders\lightcaster.glsl" />
+    <None Include="resources\shaders\lightmap.glsl" />
     <None Include="resources\shaders\main.shader" />
     <None Include="resources\shaders\model.glsl" />
     <None Include="resources\shaders\modelTexture.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\models\untitled.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

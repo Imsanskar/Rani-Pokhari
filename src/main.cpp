@@ -198,6 +198,7 @@ int main() {
 	IndexBuffer indexBuffer(indices, sizeof(indices));
 	Shader lightShader("../../../resources/shaders/light.glsl");
 	Shader lampShader("../../../resources/shaders/lamp.glsl");
+	Shader lightning("../../../resources/shaders/lightmap.glsl");
 	
 
 	VertexArray va;
@@ -297,8 +298,10 @@ int main() {
 	//model
 	Shader modelShader("../../../resources/shaders/model.glsl");
 
-	Model ictc("../../../resources/models/Temple/rani final.obj");
 
+	//Model ictc("../../../resources/models/Temple/rani final.obj");
+	Model temple("../../../resources/models/Temple/rani final.obj");
+	
 
 	while (!glfwWindowShouldClose(window)) {
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -330,53 +333,63 @@ int main() {
 		
 		
 
-		////property of sun or lamp
-		//lampShader.bind();
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, cubePositions[1]);
-		//lampShader.setUniform("model", model);
-		//lampShader.setUniform("projection", projection);
-		//lampShader.setUniform("view", view);
-		//lampShader.setUniform("lightColour", 1.0f,1.0f,1.0f);
-		//lampShader.unbind();
 		////renderer.draw(va, lampShader, 36);
 
-		//model loading
+		////model loading
+		//model = glm::translate(model, cubePositions[0]);
+		//modelShader.bind();		
+		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
+		//angle = 0.0f;
+		//trans = glm::mat4(1.0f);
+		//trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
+		//trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
+		////modelShader.setUniform("time", timeValue);
+		//modelShader.setUniform("trans", trans);
+		//modelShader.setUniform("model", model);
+		//modelShader.setUniform("projection", projection);
+		//modelShader.setUniform("view", view);
+		////ictc.render(modelShader, false);
+		//glCheckError(temple.render(lightning, false));
+		//modelShader.unbind();
+
 		model = glm::translate(model, cubePositions[0]);
-		modelShader.bind();		
+		lightning.bind();
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
 		trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
-		//modelShader.setUniform("time", timeValue);
-		modelShader.setUniform("trans", trans);
-		modelShader.setUniform("model", model);
-		modelShader.setUniform("projection", projection);
-		modelShader.setUniform("view", view);
+		
+	
+		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
+		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
+		
+		lightning.setUniform("trans", trans);
+		lightning.setUniform("model", model);
+		lightning.setUniform("projection", projection);
+		lightning.setUniform("view", view);
+		lightning.setUniform("material.shininess", 32.0f);
+		lightning.setUniform("viewPos", camera.cameraPosition);
+		lightning.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
+		lightning.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+		lightning.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+		lightning.setUniform("light.position", sunpos);
+
 		//ictc.render(modelShader, false);
-		glCheckError(ictc.render(modelShader, false));
-		modelShader.unbind();
+		glCheckError(temple.render(lightning, true));
+		lightning.unbind();
 
+		//////property of sun or lamp
+		//lampShader.bind();
+		//model = glm::mat4(1.0f);
+		//model = glm::translate(model, sunpos);
+		//lampShader.setUniform("model", model);
+		//lampShader.setUniform("projection", projection);
+		//lampShader.setUniform("view", view);
+		//lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
+		//glCheckError(sun.render(lampShader, false));
+		//lampShader.unbind();
 
-		//ligtening
-		lightShader.bind();
-		model = glm::translate(model, cubePositions[0]);
-		lightShader.setUniform("model", model);
-		lightShader.setUniform("projection", projection);
-		lightShader.setUniform("view", view);
-		//property of light
-		lightShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
-		lightShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
-		lightShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		lightShader.setUniform("light.position", 0.0f, 0.0f, 12.0f);
-		//property of material
-		lightShader.setUniform("material.ambient", 0.5f, 0.5f, 0.5f);
-		lightShader.setUniform("material.diffuse", 0.5f, 0.5f, 0.5f);
-		lightShader.setUniform("material.specular", 0.5f, 0.5f, 0.5f);
-		lightShader.setUniform("material.shininess", 32.0f);
-		lightShader.setUniform("viewPos", camera.cameraPosition);
-		lightShader.unbind();
 
 
 		glfwSwapBuffers(window);
