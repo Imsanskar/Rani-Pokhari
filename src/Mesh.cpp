@@ -63,8 +63,11 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 			number = std::to_string(heightNr++); // transfer unsigned int to stream
         else
             continue;
-		//shader.setUniform(("texture_diffuse" + number), static_cast<int>(i));
-		//shader.setUniform(("texture_diffuse" + number), static_cast<int>(i));
+		//shader.setUniform((("material." + textureType + number).c_str()), static_cast<int>(i));
+		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
 		glCheckError(textures[i].bind(i));
 	}
 	glCheckError(vao.bind());
