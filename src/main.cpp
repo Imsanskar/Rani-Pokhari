@@ -50,12 +50,11 @@ int main() {
 
 
 	//get user name
-	DWORD  bufCharCount = 200;
-	char* infoBuf = (char*)malloc(sizeof(char) * bufCharCount);
-	GetUserName((LPWSTR)infoBuf, &bufCharCount);
-	_tprintf(TEXT("User name: %s\n"), infoBuf);
+	std::string username;
+	DWORD username_len = UNLEN + 1;
+	// int checkUserName = GetUserName((LPSTR)username.c_str(), &username_len);
 
-
+	printf("%s\n", username.c_str());
 	//open gl settings
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 4);
@@ -72,7 +71,7 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-	if (strcmp(infoBuf, "imsanskar") == 0) {
+	if (true) {
 		std::string str((char*)vendor);
 		if (str.find("NVIDIA") == std::string::npos) {
 			std::cout << "Use nvidia card unless you want to get bsod";
@@ -86,106 +85,11 @@ int main() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	float data[] = {
-		-0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
 
-		-0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
-
-
-		-0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
-
-		-0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f
-	};
-
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-	};
 
 	glm::vec3 cubePositions[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
-		//glm::vec3(-1.5f, -2.2f, -2.5f),
-		//glm::vec3(-3.8f, -2.0f, -12.3f),
-		//glm::vec3(2.4f, -0.4f, -3.5f),
-		//glm::vec3(-1.7f,  3.0f, -7.5f),
-		//glm::vec3(1.3f, -2.0f, -2.5f),
-		//glm::vec3(1.5f,  2.0f, -2.5f),
-		//glm::vec3(1.5f,  0.2f, -1.5f),
-		//glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
 
@@ -194,21 +98,9 @@ int main() {
 		1, 2, 3    // second triangle
 	};
 
-	VertexBuffer vertexBuffer(data, sizeof(data));
-	IndexBuffer indexBuffer(indices, sizeof(indices));
-	Shader lightShader("../../../resources/shaders/light.glsl");
-	Shader lampShader("../../../resources/shaders/lamp.glsl");
-	Shader lightning("../../../resources/shaders/lightmap.glsl");
-	
-
-	VertexArray va;
-	VertexBufferLayout layout;
-	layout.push<float>(3);
-	layout.push<float>(3);
-	va.addBuffer(vertexBuffer, layout);
-
-	//Texture water("../../../resources/textures/water.jpg");
-	//glCheckError(water.bind());
+	Shader lightShader("../resources/shaders/light.glsl");
+	Shader lampShader("../resources/shaders/lamp.glsl");
+	Shader lightning("../resources/shaders/lightmap.glsl");
 
 
 	float skyboxVertices[] = {
@@ -257,14 +149,14 @@ int main() {
 	};
 
 	const CubeMap skyBox(std::vector<std::string>{
-		"../../../resources/skybox/right.jpg",
-			"../../../resources/skybox/left.jpg",
-			"../../../resources/skybox/top.jpg",
-			"../../../resources/skybox/bottom.jpg",
-			"../../../resources/skybox/front.jpg",
-			"../../../resources/skybox/back.jpg"});
+		"../resources/skybox/right.jpg",
+			"../resources/skybox/left.jpg",
+			"../resources/skybox/top.jpg",
+			"../resources/skybox/bottom.jpg",
+			"../resources/skybox/front.jpg",
+			"../resources/skybox/back.jpg"});
 
-	Shader skyBoxShader("../../../resources/shaders/cubeMap.shader");
+	Shader skyBoxShader("../resources/shaders/cubeMap.shader");
 	skyBoxShader.bind();
 	VertexBuffer skyBoxVB(skyboxVertices, sizeof(skyboxVertices));
 	VertexBufferLayout skyBoxLayout;
@@ -296,11 +188,11 @@ int main() {
 
 
 	//model
-	Shader modelShader("../../../resources/shaders/model.glsl");
+	Shader modelShader("../resources/shaders/model.glsl");
 
 
-	//Model ictc("../../../resources/models/Temple/rani final.obj");
-	Model temple("../../../resources/models/Temple/rani final.obj");
+	//Model ictc("../resources/models/Temple/rani final.obj");
+	Model temple("../resources/models/Temple/rani final.obj");
 	
 
 	while (!glfwWindowShouldClose(window)) {
