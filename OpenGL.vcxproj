@@ -87,8 +87,8 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)Dependencies\includes\;$(SolutionDir)includes\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\lib;$(SolutionDir)Dependencies\lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)bin\</IntDir>
-    <OutDir>$(SolutionDir)bin</OutDir>
+    <IntDir>$(SolutionDir)build</IntDir>
+    <OutDir>$(SolutionDir)build</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -138,8 +138,8 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc142-mtd.lib;assimpd.lib;zlib.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)bin\assimpd.exe" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\assimpd.exe" "$(SolutionDir)bin\assimpd.exe"
-if not exist "$(SolutionDir)bin\zlib.dll" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\zlib.dll" "$(SolutionDir)bin\zlib.dll"
+      <Command>if not exist "$(SolutionDir)build\assimpd.exe" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\assimpd.exe" "$(SolutionDir)build\assimpd.exe"
+if not exist "$(SolutionDir)build\zlib.dll" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\zlib.dll" "$(SolutionDir)build\zlib.dll"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

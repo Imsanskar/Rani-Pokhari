@@ -2,8 +2,8 @@
 
 setlocal
 
-if not exist "bin" mkdir bin
-pushd bin
+if not exist "build" mkdir build
+pushd build
 
 set compile_type="Debug"
 
@@ -19,7 +19,9 @@ echo -------------------------------------
 cmake -DCMAKE_BUILD_TYPE=Debug -B./ -G"Unix Makefiles" ../
 make
 
-goto DoneConfig
+if %ERRORLEVEL% NEQ 0 goto CompileError
+goto Run
+
 
 :ReleaseConfig
 echo -------------------------------------
@@ -28,11 +30,17 @@ echo -------------------------------------
 
 cmake -DCMAKE_BUILD_TYPE=Release -B./  -G"Unix Makefiles" ../
 make
-goto DoneConfig
+if %ERRORLEVEL% NEQ 0 goto CompileError
+goto Run
 
-:DoneConfig
+:Run
 if not exist "assimp.exe" copy "..\Dependencies\lib\Debug\assimp.exe" "assimp.exe"
 if not exist "zlib.dll" copy "..\Dependencies\lib\Debug\zlib.dll" "zlib.dll"
 RaniPokhari.exe
+goto Done
 
-@REM popd
+:CompileError
+echo Compilation Failed
+
+:Done
+popd
