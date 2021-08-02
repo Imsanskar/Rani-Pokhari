@@ -222,27 +222,7 @@ int main() {
 		trans = glm::rotate(trans, (float)timeValue, glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, cubePositions[0]);
-		
-		
 
-		////renderer.draw(va, lampShader, 36);
-
-		////model loading
-		//model = glm::translate(model, cubePositions[0]);
-		//modelShader.bind();		
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
-		//angle = 0.0f;
-		//trans = glm::mat4(1.0f);
-		//trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
-		//trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
-		////modelShader.setUniform("time", timeValue);
-		//modelShader.setUniform("trans", trans);
-		//modelShader.setUniform("model", model);
-		//modelShader.setUniform("projection", projection);
-		//modelShader.setUniform("view", view);
-		////ictc.render(modelShader, false);
-		//glCheckError(temple.render(lightning, false));
-		//modelShader.unbind();
 
 		model = glm::translate(model, cubePositions[0]);
 		lightning.bind();

@@ -5,7 +5,9 @@ setlocal
 if not exist "build" mkdir build
 pushd build
 
-set compile_type="Debug"
+@REM del CMakeCache.txt
+
+set compile_type="debug"
 
 if "%1"=="debug" goto DebugConfig
 if "%1"=="release" goto ReleaseConfig
@@ -15,7 +17,14 @@ echo -------------------------------------
 echo 	Debug Build configured
 echo -------------------------------------
 
+@REM where cl >nul 2>nul
+@REM if %ERRORLEVEL% neq 0 goto SkipMSVC
+@REM msbuild ../RaniPokhari.sln
+@REM if %ERRORLEVEL% NEQ 0 goto CompileError
+@REM goto Run
 
+
+:SkipMSVC
 cmake -DCMAKE_BUILD_TYPE=Debug -B./ -G"Unix Makefiles" ../
 make
 

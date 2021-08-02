@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Math/vec.h"
 
 
 enum class CameraDirection {
@@ -12,7 +13,7 @@ enum class CameraDirection {
 
 
 struct Camera {
-	glm::vec3 cameraPosition, cameraFront, cameraUp, cameraRight;
+	MathLib::Vec3 cameraPosition, cameraFront, cameraUp, cameraRight;
 
 	float sensitivity;
 

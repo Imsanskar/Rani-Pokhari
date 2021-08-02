@@ -123,14 +123,14 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     float cameraSpeed = 1.5f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.cameraPosition += cameraSpeed * glm::normalize(camera.cameraFront);
+        camera.cameraPosition += cameraSpeed * MathLib::normalize(camera.cameraFront);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.cameraPosition -= cameraSpeed * glm::normalize(glm::cross(camera.cameraFront, camera.cameraUp));
+        camera.cameraPosition -= cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.cameraPosition -= cameraSpeed * glm::normalize(camera.cameraFront);
+        camera.cameraPosition -= cameraSpeed * MathLib::normalize(camera.cameraFront);
     }if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.cameraPosition += cameraSpeed * glm::normalize(glm::cross(camera.cameraFront, camera.cameraUp));
+        camera.cameraPosition += cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
 }
