@@ -117,6 +117,11 @@ void Shader::setUniform(std::string name, glm::mat4 transform){
 	glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(transform));
 }
 
+
+void Shader::setUniform(std::string name, MathLib::Mat4 transform){
+	glUniformMatrix4fv(GetUniformLocation(name), 1, false, transform.value_ptr());
+}
+
 int Shader::GetUniformLocation(std::string& name){
 	if (uniformStorage.find(name) != uniformStorage.end()) {
 		return uniformStorage[name];

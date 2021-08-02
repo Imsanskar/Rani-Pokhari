@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Math/vec.h"
+#include <Math/matrix.h>
 
 struct Shader {
 	std::string vertexSource;
@@ -41,6 +41,7 @@ struct Shader {
 
 	void setUniform(std::string name, MathLib::Vec3 vec);
 	void setUniform(std::string name, glm::mat4 transform);
+	void setUniform(std::string name, MathLib::Mat4 transform);
 
 	int GetUniformLocation(std::string& name);
 

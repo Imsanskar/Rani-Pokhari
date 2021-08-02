@@ -79,7 +79,7 @@ namespace MathLib {
 			return Vec3(x / magnitude, y / magnitude, z / magnitude);
 		}
 
-		inline Vec3 operator +=(Vec3 vec){
+		inline Vec3& operator +=(Vec3 vec){
 			x += vec.x;
 			y += vec.y;
 			z += vec.z;
@@ -87,7 +87,7 @@ namespace MathLib {
 			return *this; 
 		}
 
-		inline Vec3 operator -=(Vec3 vec){
+		inline Vec3& operator -=(Vec3 vec){
 			x -= vec.x;
 			y -= vec.y;
 			z -= vec.z;
@@ -103,6 +103,11 @@ namespace MathLib {
 			result.z = x * v.z - z * v.x;
 
 			return result;
+		}
+
+
+		inline float dot(Vec3 vec) const{
+			return x * vec.x + y * vec.y + z * vec.z;
 		}
 	};
 	
@@ -121,13 +126,14 @@ namespace MathLib {
 	}
 
 	inline Vec3 normalize(Vec3 vec){
-		return vec.unitVector();
+		float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+
+		return Vec3(vec.x / magnitude, vec.y / magnitude, vec.z / magnitude);
 	}
 
 
 	inline Vec3 operator -(const Vec3& vec) {
-		Vec3 result;
-		return result - vec;
+		return Vec3(-vec.x, -vec.y, -vec.z);
 	}
 
 

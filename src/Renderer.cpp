@@ -40,7 +40,6 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     UserContext *context = (UserContext *)glfwGetWindowUserPointer(window);
     
     Renderer *renderer = context->renderer;
-
     if (renderer->firstMouse)
     {
         Renderer::previousX = xPos;
@@ -55,7 +54,7 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     Renderer::previousX = xPos;
     Renderer::previousY = yPos;
 
-    renderer->camera.processMouseEvent(xOffset, yOffset);
+    renderer->camera.processMouseEvent(xOffset, yOffset, true);
 
     glfwSetWindowUserPointer(window, context);
 }

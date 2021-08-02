@@ -176,6 +176,7 @@ if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
+    <ClCompile Include="src\math.cpp" />
     <ClCompile Include="src\stbi_image.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />

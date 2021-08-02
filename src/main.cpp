@@ -1,14 +1,9 @@
 ﻿#include <glad/glad.h>
 #include <iostream>
-#include "Renderer.h"
 #include <glm/glm.hpp>
-#include <Textures.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <assimp/scene.h>
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
 #include <CubeMap.h>
 #include <Model.h>
 #include <tchar.h>
@@ -192,7 +187,7 @@ int main() {
 
 
 	//Model ictc("../resources/models/Temple/rani final.obj");
-	Model temple("../resources/models/Temple/rani final.obj");
+	// Model temple("../resources/models/Temple/rani final.obj");
 	
 
 	while (!glfwWindowShouldClose(window)) {
@@ -202,7 +197,7 @@ int main() {
 		glDepthMask(GL_FALSE);
 		//skybox
 		skyBoxShader.bind();
-		glm::mat4 view = glm::mat4(glm::mat3(renderer.camera.GetLookAtMatrix()));
+		MathLib::Mat4 view = MathLib::Mat4(MathLib::Mat3(renderer.camera.GetLookAtMatrix()));
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
@@ -235,7 +230,7 @@ int main() {
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
-		
+			
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
 		lightning.setUniform("projection", projection);
@@ -248,7 +243,7 @@ int main() {
 		lightning.setUniform("light.position", sunpos);
 
 		//ictc.render(modelShader, false);
-		glCheckError(temple.render(lightning, true));
+		// glCheckError(temple.render(lightning, true));
 		lightning.unbind();
 
 		//////property of sun or lamp

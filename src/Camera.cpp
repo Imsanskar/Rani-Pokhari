@@ -11,11 +11,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up, float _yaw, fl
     sensitivity = 0.2f;
 }
 
-glm::mat4 Camera::GetLookAtMatrix() const{
-	glm::vec3 cameraPos = glm::vec3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-	glm::vec3 cameraFrontPos = glm::vec3(cameraFront.x, cameraFront.y, cameraFront.z);
-	glm::vec3 cameraUpPos = glm::vec3(cameraUp.x, cameraUp.y, cameraUp.z);
-	return glm::lookAt(cameraPos, cameraPos + glm::normalize(cameraFrontPos), cameraUpPos);
+MathLib::Mat4 Camera::GetLookAtMatrix() const{
+	return MathLib::lookAt(cameraPosition, cameraPosition + MathLib::normalize(cameraFront), cameraUp);
 }
 
 void Camera::processKeyboardEvent(CameraDirection direction, float deltaTime){
@@ -49,21 +46,13 @@ void Camera::processMouseEvent(float xOffset, float yOffset, bool constrainScree
         if (pitch < -89.0f)
             pitch = -89.0f;
     }
-    MathLib::Vec3 front;
+    glm::vec3 front;
 
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
-    cameraFront = MathLib::normalize(front);
-}
-
-void Camera::updateVectors(){
-    MathLib::Vec3 front;
-
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-    cameraFront = MathLib::normalize(front);
+    cameraFront.x = glm::normalize(front).x;
+    cameraFront.y = glm::normalize(front).y;
+    cameraFront.z = glm::normalize(front).z;
 }
