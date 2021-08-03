@@ -231,7 +231,7 @@ int main() {
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
-			
+		MathLib::vec3 sunpos2 = MathLib::vec3(0.0f, 0.0f, 10.0f); 			
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
 		lightning.setUniform("projection", projection);
@@ -241,7 +241,7 @@ int main() {
 		lightning.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightning.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
 		lightning.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		lightning.setUniform("light.position", sunpos);
+		lightning.setUniform("light.position", sunpos2);
 
 		//ictc.render(modelShader, false);
 		glCheckError(temple.render(lightning, true));

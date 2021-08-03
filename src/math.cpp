@@ -38,7 +38,7 @@ namespace MathLib {
 
 
 
-	mat4 translate(const mat4& mat, Vec3 vec) {
+	mat4 translate(const mat4& mat, vec3 vec) {
 		mat4 result = mat;
 		result.mat[0][3] = vec.x;
 		result.mat[1][3] = vec.y;
@@ -84,9 +84,9 @@ namespace MathLib {
 	}
 
 
-	mat4 rotate(const mat4& matrix, const Vec3& vec, const Vec3& point, const float angle) {
+	mat4 rotate(const mat4& matrix, const vec3& vec, const vec3& point, const float angle) {
 		mat4 result(1.0f);
-		Vec3 axis = vec.unitVector();
+		vec3 axis = vec.unitVector();
 
 		result = translate(result, -point);
 		result = rotate(matrix, vec, angle);
@@ -94,9 +94,9 @@ namespace MathLib {
 		return result * matrix;
 	}
 
-	mat4 rotate(const mat4& matrix, const Vec3& vec, const float angle) {
+	mat4 rotate(const mat4& matrix, const vec3& vec, const float angle) {
 		mat4 result(1.0f);
-		Vec3 axis = vec.unitVector();
+		vec3 axis = vec.unitVector();
 
 		const float sinVal = sin(angle);
 		const float cosVal = cos(angle);
@@ -120,7 +120,7 @@ namespace MathLib {
 		return result * matrix;
 	}
 
-	mat4 lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
+	mat4 lookAt(const vec3& eye, const vec3& center, const vec3& up) {
 		mat4 result(1.0f);
 
 		auto f = (-center + eye).unitVector();

@@ -39,7 +39,7 @@ struct Shader {
 
 	void setUniform(std::string name, glm::vec3 vec);
 
-	void setUniform(std::string name, MathLib::Vec3 vec);
+	void setUniform(std::string name, MathLib::vec3 vec);
 	void setUniform(std::string name, glm::mat4 transform);
 	void setUniform(std::string name, MathLib::mat4 transform);
 

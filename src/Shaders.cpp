@@ -109,7 +109,7 @@ void Shader::setUniform(std::string name, glm::vec3 vec) {
 }
 
 
-void Shader::setUniform(std::string name, MathLib::Vec3 vec) {
+void Shader::setUniform(std::string name, MathLib::vec3 vec) {
 	glUniform3fv(GetUniformLocation(name),1, vec.value_ptr());
 }
 

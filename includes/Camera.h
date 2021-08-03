@@ -13,7 +13,7 @@ enum class CameraDirection {
 
 
 struct Camera {
-	MathLib::Vec3 cameraPosition, cameraFront, cameraUp, cameraRight;
+	MathLib::vec3 cameraPosition, cameraFront, cameraUp, cameraRight;
 
 	float sensitivity;
 

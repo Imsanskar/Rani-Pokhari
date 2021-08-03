@@ -193,7 +193,7 @@ namespace MathLib {
 
 	mat4 translate(const mat4& mat, float tx, float ty, float tz);
 
-	mat4 translate(const mat4& mat, Vec3 vec);
+	mat4 translate(const mat4& mat, vec3 vec);
 
 	mat4 rotateX(const mat4& matrix, float angle);
 
@@ -201,7 +201,7 @@ namespace MathLib {
 
 	mat4 rotateZ(const mat4& matrix, float angle);
 
-	mat4 rotate(const mat4& matrix, const Vec3& vec, const float angle);
+	mat4 rotate(const mat4& matrix, const vec3& vec, const float angle);
 
-	mat4 lookAt(const Vec3& cameraPos, const Vec3& target, const Vec3& up);
+	mat4 lookAt(const vec3& cameraPos, const vec3& target, const vec3& up);
 }

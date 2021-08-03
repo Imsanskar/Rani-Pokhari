@@ -46,7 +46,7 @@ void Camera::processMouseEvent(float xOffset, float yOffset, bool constrainScree
         if (pitch < -89.0f)
             pitch = -89.0f;
     }
-    MathLib::Vec3 front;
+    MathLib::vec3 front;
 
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
