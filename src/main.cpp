@@ -188,6 +188,7 @@ int main() {
 
 	//Model ictc("../resources/models/Temple/rani final.obj");
 	Model temple("../resources/models/Raanipokhari.obj");
+	Model sun("../resources/models/sun.obj");
 	
 
 	while (!glfwWindowShouldClose(window)) {
@@ -201,7 +202,7 @@ int main() {
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
-		renderer.draw(skyBoxVA, skyBoxShader, 36);
+		// renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
@@ -230,8 +231,7 @@ int main() {
 		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
-		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
-		MathLib::vec3 sunpos2 = MathLib::vec3(0.0f, 0.0f, 10.0f); 			
+		MathLib::vec3 sunpos = MathLib::vec3(0.0f, 10.0f, 0.0f); 			
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
 		lightning.setUniform("projection", projection);
@@ -241,22 +241,24 @@ int main() {
 		lightning.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightning.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
 		lightning.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		lightning.setUniform("light.position", sunpos2);
+		lightning.setUniform("light.position", sunpos);
 
 		//ictc.render(modelShader, false);
 		glCheckError(temple.render(lightning, true));
 		lightning.unbind();
 
 		//////property of sun or lamp
-		//lampShader.bind();
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, sunpos);
-		//lampShader.setUniform("model", model);
-		//lampShader.setUniform("projection", projection);
-		//lampShader.setUniform("view", view);
-		//lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
-		//glCheckError(sun.render(lampShader, false));
-		//lampShader.unbind();
+		lampShader.bind();
+		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
+		modelSun = MathLib::translate(modelSun, sunpos);
+		modelSun = MathLib::scale(modelSun, MathLib::vec3(0.2f));
+		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
+		lampShader.setUniform("model", modelSun);
+		lampShader.setUniform("projection", projection);
+		lampShader.setUniform("view", view);
+		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
+		glCheckError(sun.render(lampShader, true));
+		lampShader.unbind();
 
 
 
