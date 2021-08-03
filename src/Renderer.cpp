@@ -40,7 +40,6 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     UserContext *context = (UserContext *)glfwGetWindowUserPointer(window);
     
     Renderer *renderer = context->renderer;
-
     if (renderer->firstMouse)
     {
         Renderer::previousX = xPos;
@@ -55,7 +54,7 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     Renderer::previousX = xPos;
     Renderer::previousY = yPos;
 
-    renderer->camera.processMouseEvent(xOffset, yOffset);
+    renderer->camera.processMouseEvent(xOffset, yOffset, true);
 
     glfwSetWindowUserPointer(window, context);
 }
@@ -123,14 +122,14 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     float cameraSpeed = 1.5f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.cameraPosition += cameraSpeed * glm::normalize(camera.cameraFront);
+        camera.cameraPosition += cameraSpeed * MathLib::normalize(camera.cameraFront);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.cameraPosition -= cameraSpeed * glm::normalize(glm::cross(camera.cameraFront, camera.cameraUp));
+        camera.cameraPosition -= cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.cameraPosition -= cameraSpeed * glm::normalize(camera.cameraFront);
+        camera.cameraPosition -= cameraSpeed * MathLib::normalize(camera.cameraFront);
     }if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.cameraPosition += cameraSpeed * glm::normalize(glm::cross(camera.cameraFront, camera.cameraUp));
+        camera.cameraPosition += cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
 }

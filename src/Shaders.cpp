@@ -108,8 +108,18 @@ void Shader::setUniform(std::string name, glm::vec3 vec) {
 	glUniform3fv(GetUniformLocation(name),1, glm::value_ptr(vec));
 }
 
+
+void Shader::setUniform(std::string name, MathLib::vec3 vec) {
+	glUniform3fv(GetUniformLocation(name),1, vec.value_ptr());
+}
+
 void Shader::setUniform(std::string name, glm::mat4 transform){
 	glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(transform));
+}
+
+
+void Shader::setUniform(std::string name, MathLib::mat4 transform){
+	glUniformMatrix4fv(GetUniformLocation(name), 1, false, transform.value_ptr());
 }
 
 int Shader::GetUniformLocation(std::string& name){

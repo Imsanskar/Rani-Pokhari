@@ -1,14 +1,9 @@
 ﻿#include <glad/glad.h>
 #include <iostream>
-#include "Renderer.h"
 #include <glm/glm.hpp>
-#include <Textures.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <assimp/scene.h>
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
 #include <CubeMap.h>
 #include <Model.h>
 #include <tchar.h>
@@ -192,7 +187,7 @@ int main() {
 
 
 	//Model ictc("../resources/models/Temple/rani final.obj");
-	Model temple("../resources/models/Temple/rani final.obj");
+	Model temple("../resources/models/Raanipokhari.obj");
 	
 
 	while (!glfwWindowShouldClose(window)) {
@@ -202,7 +197,7 @@ int main() {
 		glDepthMask(GL_FALSE);
 		//skybox
 		skyBoxShader.bind();
-		glm::mat4 view = glm::mat4(glm::mat3(renderer.camera.GetLookAtMatrix()));
+		MathLib::mat4 view = MathLib::mat4(MathLib::mat3(renderer.camera.GetLookAtMatrix()));
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
@@ -222,40 +217,21 @@ int main() {
 		trans = glm::rotate(trans, (float)timeValue, glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, cubePositions[0]);
-		
-		
 
-		////renderer.draw(va, lampShader, 36);
-
-		////model loading
-		//model = glm::translate(model, cubePositions[0]);
-		//modelShader.bind();		
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
-		//angle = 0.0f;
-		//trans = glm::mat4(1.0f);
-		//trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
-		//trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
-		////modelShader.setUniform("time", timeValue);
-		//modelShader.setUniform("trans", trans);
-		//modelShader.setUniform("model", model);
-		//modelShader.setUniform("projection", projection);
-		//modelShader.setUniform("view", view);
-		////ictc.render(modelShader, false);
-		//glCheckError(temple.render(lightning, false));
-		//modelShader.unbind();
 
 		model = glm::translate(model, cubePositions[0]);
+		model = glm::mat4(1.0f);
 		lightning.bind();
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
-		trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
+		trans = glm::scale(trans, glm::vec3(00.05f, 00.05f, 00.05f));
 		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		glm::vec3 sunpos = glm::vec3(glm::cos(glm::radians(pt)), 0.0f, glm::sin(glm::radians(pt)));//position of light
-		
+		MathLib::vec3 sunpos2 = MathLib::vec3(0.0f, 0.0f, 10.0f); 			
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
 		lightning.setUniform("projection", projection);
@@ -265,7 +241,7 @@ int main() {
 		lightning.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightning.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
 		lightning.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-		lightning.setUniform("light.position", sunpos);
+		lightning.setUniform("light.position", sunpos2);
 
 		//ictc.render(modelShader, false);
 		glCheckError(temple.render(lightning, true));

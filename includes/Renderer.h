@@ -5,6 +5,7 @@
 #include <Shaders.h>
 #include <GLFW/glfw3.h>
 #include <Camera.h>
+#include "Math/vec.h"
 
 
 /*--------------------------------------- ERROR CHECKING FUNCTIONS ---------------------------------------*/
