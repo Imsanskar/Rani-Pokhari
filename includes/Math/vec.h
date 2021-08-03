@@ -24,8 +24,9 @@ namespace MathLib {
 
 
 	struct Vec3 {
-		float x, y, z;
-
+		struct{
+			float x, y, z;
+		};
 		Vec3(float val = 0) {
 			x = y = z = val;
 		}
@@ -76,10 +77,12 @@ namespace MathLib {
 		inline Vec3 unitVector() const{
 			float magnitude = norm();
 
-			return Vec3(x / magnitude, y / magnitude, z / magnitude);
+			if(magnitude > 0)
+				return Vec3(x / magnitude, y / magnitude, z / magnitude);
+			return Vec3(0.0f);
 		}
 
-		inline Vec3& operator +=(Vec3 vec){
+		inline Vec3 operator +=(Vec3 vec){
 			x += vec.x;
 			y += vec.y;
 			z += vec.z;
@@ -87,7 +90,7 @@ namespace MathLib {
 			return *this; 
 		}
 
-		inline Vec3& operator -=(Vec3 vec){
+		inline Vec3 operator -=(Vec3 vec){
 			x -= vec.x;
 			y -= vec.y;
 			z -= vec.z;
@@ -120,7 +123,7 @@ namespace MathLib {
 
 		result.x = y * v.z - v.y * z;
 		result.y = - (x * v.z - v.x * z);
-		result.z = x * v.z - z * v.x;
+		result.z = x * v.y - y * v.x;
 
 		return result;
 	}
@@ -128,7 +131,9 @@ namespace MathLib {
 	inline Vec3 normalize(Vec3 vec){
 		float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 
-		return Vec3(vec.x / magnitude, vec.y / magnitude, vec.z / magnitude);
+		if(magnitude > 0)
+			return Vec3(vec.x / magnitude, vec.y / magnitude, vec.z / magnitude);
+		return Vec3(0.0f);
 	}
 
 

@@ -3,7 +3,7 @@
 
 namespace MathLib {
 	//mat3 constructor
-	Mat3::Mat3(Mat4 mat4){
+	mat3::mat3(mat4 mat4){
 		for (int i = 0; i < 3; i++){
 			for(int j = 0; j < 3; j++){
 				mat[i][j] = mat4.mat[i][j];
@@ -15,8 +15,8 @@ namespace MathLib {
 
 
 	//matrix multiplication
-	Mat4 operator *(Mat4 a, Mat4 b) {
-		Mat4 result;
+	mat4 operator *(mat4 a, mat4 b) {
+		mat4 result;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				for (int k = 0; k < 4; k++) {
@@ -28,8 +28,8 @@ namespace MathLib {
 	}
 
 
-	Mat4 translate(const Mat4& mat, float tx, float ty, float tz) {
-		Mat4 result = mat;
+	mat4 translate(const mat4& mat, float tx, float ty, float tz) {
+		mat4 result = mat;
 		result.mat[0][3] = tx;
 		result.mat[1][3] = ty;
 		result.mat[1][3] = tz;
@@ -38,8 +38,8 @@ namespace MathLib {
 
 
 
-	Mat4 translate(const Mat4& mat, Vec3 vec) {
-		Mat4 result = mat;
+	mat4 translate(const mat4& mat, Vec3 vec) {
+		mat4 result = mat;
 		result.mat[0][3] = vec.x;
 		result.mat[1][3] = vec.y;
 		result.mat[2][3] = vec.z;
@@ -47,8 +47,8 @@ namespace MathLib {
 		return result;
 	}
 
-	Mat4 rotateX(const Mat4& matrix, float angle) {
-		Mat4 result(1.0f);
+	mat4 rotateX(const mat4& matrix, float angle) {
+		mat4 result(1.0f);
 
 		result.mat[1][1] = cos(angle);
 		result.mat[1][2] = -sin(angle);
@@ -59,8 +59,8 @@ namespace MathLib {
 	}
 
 
-	Mat4 rotateY(const Mat4& matrix, float angle) {
-		Mat4 result(1.0f);
+	mat4 rotateY(const mat4& matrix, float angle) {
+		mat4 result(1.0f);
 
 		result.mat[0][0] = cos(angle);
 		result.mat[0][2] = sin(angle);
@@ -72,8 +72,8 @@ namespace MathLib {
 	}
 
 
-	Mat4 rotateZ(const Mat4& matrix, float angle) {
-		Mat4 result(1.0f);
+	mat4 rotateZ(const mat4& matrix, float angle) {
+		mat4 result(1.0f);
 
 		result.mat[0][0] = cos(angle);
 		result.mat[0][1] = -sin(angle);
@@ -84,18 +84,18 @@ namespace MathLib {
 	}
 
 
-	// Mat4 rotate(const Mat4& matrix, const Vec3& vec, const Vec3& point, const float angle) {
-	// 	Mat4 result(1.0f);
-	// 	Vec3 axis = vec.unitVector();
+	mat4 rotate(const mat4& matrix, const Vec3& vec, const Vec3& point, const float angle) {
+		mat4 result(1.0f);
+		Vec3 axis = vec.unitVector();
 
-	// 	result = translate(result, -point);
-	// 	result = rotate(matrix, vec, angle);
-	// 	result = translate(result, point);
-	// 	return result * matrix;
-	// }
+		result = translate(result, -point);
+		result = rotate(matrix, vec, angle);
+		result = translate(result, point);
+		return result * matrix;
+	}
 
-	Mat4 rotate(const Mat4& matrix, const Vec3& vec, const float angle) {
-		Mat4 result(1.0f);
+	mat4 rotate(const mat4& matrix, const Vec3& vec, const float angle) {
+		mat4 result(1.0f);
 		Vec3 axis = vec.unitVector();
 
 		const float sinVal = sin(angle);
@@ -120,12 +120,12 @@ namespace MathLib {
 		return result * matrix;
 	}
 
-	Mat4 lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
-		Mat4 result(1.0f);
+	mat4 lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
+		mat4 result(1.0f);
 
-		auto f = (center - eye).unitVector();
-		auto s = cross(f, up).unitVector();
-		auto u = cross(s, f).unitVector();
+		auto f = (-center + eye).unitVector();
+		auto s = cross(up, f).unitVector();
+		auto u = cross(f, s).unitVector();
 
 		result.mat[0][0] = s.x;
 		result.mat[1][0] = s.y;
@@ -145,6 +145,15 @@ namespace MathLib {
 		result.mat[3][0] = -s.dot(eye);
 		result.mat[3][1] = -u.dot(eye);
 		result.mat[3][2] = -f.dot(eye);
+
+		return result;
+	}
+
+
+	mat4 projectionMatrix(float aspectRatio, float fov, float near = 0.1, float far = 100.0f){
+		mat4 result;
+
+
 
 		return result;
 	}

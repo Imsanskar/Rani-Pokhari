@@ -187,7 +187,7 @@ int main() {
 
 
 	//Model ictc("../resources/models/Temple/rani final.obj");
-	// Model temple("../resources/models/Temple/rani final.obj");
+	Model temple("../resources/models/Raanipokhari.obj");
 	
 
 	while (!glfwWindowShouldClose(window)) {
@@ -197,7 +197,7 @@ int main() {
 		glDepthMask(GL_FALSE);
 		//skybox
 		skyBoxShader.bind();
-		MathLib::Mat4 view = MathLib::Mat4(MathLib::Mat3(renderer.camera.GetLookAtMatrix()));
+		MathLib::mat4 view = MathLib::mat4(MathLib::mat3(renderer.camera.GetLookAtMatrix()));
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
@@ -220,12 +220,13 @@ int main() {
 
 
 		model = glm::translate(model, cubePositions[0]);
+		model = glm::mat4(1.0f);
 		lightning.bind();
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
-		trans = glm::scale(trans, glm::vec3(100.5f, 100.5f, 100.5f));
+		trans = glm::scale(trans, glm::vec3(00.05f, 00.05f, 00.05f));
 		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
@@ -243,7 +244,7 @@ int main() {
 		lightning.setUniform("light.position", sunpos);
 
 		//ictc.render(modelShader, false);
-		// glCheckError(temple.render(lightning, true));
+		glCheckError(temple.render(lightning, true));
 		lightning.unbind();
 
 		//////property of sun or lamp

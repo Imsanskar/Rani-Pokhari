@@ -6,29 +6,29 @@
 
 namespace MathLib {
 
-	struct Mat4;
+	struct mat4;
 
-	struct Mat3{
+	struct mat3{
 		float mat[3][3];
 
-		Mat3() {
+		mat3() {
 			
 		}
 
-		Mat3(float x){
+		mat3(float x){
 			for (int i = 0; i < 3; i++) {
 				mat[i][i] = x;
 			}
 		}
 
-		Mat3(Mat4 mat4);
+		mat3(mat4 mat4);
 
 		float& operator [](const std::pair<int, int>& index) {
 			return mat[index.first][index.second];
 		}
  
-		Mat3 operator +(Mat3 m) {
-			Mat3 result;
+		mat3 operator +(mat3 m) {
+			mat3 result;
 
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
@@ -40,8 +40,8 @@ namespace MathLib {
 
 
 
-		Mat3 operator -(Mat3 m) {
-			Mat3 result;
+		mat3 operator -(mat3 m) {
+			mat3 result;
 
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
@@ -51,7 +51,7 @@ namespace MathLib {
 			return result.transpose();
 		}
 
-		bool operator ==(Mat3 m) {
+		bool operator ==(mat3 m) {
 			// bool flag = true;
 			// for (int i = 0; i < 3; i++) {
 			// 	flag = this->mat[i] == m[i];
@@ -67,8 +67,8 @@ namespace MathLib {
 		}
 
 
-		Mat3 transpose(){
-			Mat3 result;
+		mat3 transpose(){
+			mat3 result;
 
 			for(int i = 0; i < 3; i++){
 				for(int j = 0; j < 3; j++){
@@ -79,7 +79,7 @@ namespace MathLib {
 		}
 	};
 
-	 inline std::ostream& operator<<(std::ostream& os, Mat3 matrix){
+	 inline std::ostream& operator<<(std::ostream& os, mat3 matrix){
     	std::cout << "\nOutput in Row major order -> \n";
     	for (int i = 0; i < 3; ++i)
     	{
@@ -93,15 +93,15 @@ namespace MathLib {
 	};
 
 
-	struct Mat4 {
+	struct mat4 {
 		float mat[4][4] =  {0.0f};
 
-		Mat4() {
+		mat4() {
 			
 		}
 		
 
-		Mat4(Mat3 mat3){
+		mat4(mat3 mat3){
 			for (int i = 0; i < 3; i++){
 				for(int j = 0; j < 3; j++){
 					mat[i][j] = mat3.mat[i][j];
@@ -110,7 +110,7 @@ namespace MathLib {
 			mat[3][3] = 1.0f;
 		}
 
-		Mat4(float x){
+		mat4(float x){
 			for (int i = 0; i < 4; i++) {
 				mat[i][i] = x;
 			}
@@ -124,8 +124,8 @@ namespace MathLib {
 			return mat[index.first][index.second];
 		}
  
-		Mat4 operator +(Mat4 m) {
-			Mat4 result;
+		mat4 operator +(mat4 m) {
+			mat4 result;
 
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
@@ -137,8 +137,8 @@ namespace MathLib {
 
 
 
-		Mat4 operator -(Mat4 m) {
-			Mat4 result;
+		mat4 operator -(mat4 m) {
+			mat4 result;
 
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
@@ -148,7 +148,7 @@ namespace MathLib {
 			return result.transpose();
 		}
 
-		bool operator ==(Mat4 m) {
+		bool operator ==(mat4 m) {
 			// bool flag = true;
 			// for (int i = 0; i < 4; i++) {
 			// 	flag = this->mat[i] == m[i];
@@ -164,8 +164,8 @@ namespace MathLib {
 		}
 
 
-		Mat4 transpose(){
-			Mat4 result;
+		mat4 transpose(){
+			mat4 result;
 
 			for(int i = 0; i < 4; i++){
 				for(int j = 0; j < 4; j++){
@@ -176,7 +176,7 @@ namespace MathLib {
 		}
 	};
 
-	 inline std::ostream& operator<<(std::ostream& os, Mat4 matrix){
+	 inline std::ostream& operator<<(std::ostream& os, mat4 matrix){
     	std::cout << "\nOutput in Row major order -> \n";
     	for (int i = 0; i < 4; ++i)
     	{
@@ -189,19 +189,19 @@ namespace MathLib {
     	return os << std::endl;
   	}
 
-	Mat4 operator *(Mat4 a, Mat4 b);
+	mat4 operator *(mat4 a, mat4 b);
 
-	Mat4 translate(const Mat4& mat, float tx, float ty, float tz);
+	mat4 translate(const mat4& mat, float tx, float ty, float tz);
 
-	Mat4 translate(const Mat4& mat, Vec3 vec);
+	mat4 translate(const mat4& mat, Vec3 vec);
 
-	Mat4 rotateX(const Mat4& matrix, float angle);
+	mat4 rotateX(const mat4& matrix, float angle);
 
-	Mat4 rotateY(const Mat4& matrix, float angle);
+	mat4 rotateY(const mat4& matrix, float angle);
 
-	Mat4 rotateZ(const Mat4& matrix, float angle);
+	mat4 rotateZ(const mat4& matrix, float angle);
 
-	Mat4 rotate(const Mat4& matrix, const Vec3& vec, const float angle);
+	mat4 rotate(const mat4& matrix, const Vec3& vec, const float angle);
 
-	Mat4 lookAt(const Vec3& cameraPos, const Vec3& target, const Vec3& up);
+	mat4 lookAt(const Vec3& cameraPos, const Vec3& target, const Vec3& up);
 }

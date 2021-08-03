@@ -118,7 +118,7 @@ void Shader::setUniform(std::string name, glm::mat4 transform){
 }
 
 
-void Shader::setUniform(std::string name, MathLib::Mat4 transform){
+void Shader::setUniform(std::string name, MathLib::mat4 transform){
 	glUniformMatrix4fv(GetUniformLocation(name), 1, false, transform.value_ptr());
 }
 
