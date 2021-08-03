@@ -30,9 +30,18 @@ namespace MathLib {
 
 	mat4 translate(const mat4& mat, float tx, float ty, float tz) {
 		mat4 result = mat;
-		result.mat[0][3] = tx;
-		result.mat[1][3] = ty;
-		result.mat[1][3] = tz;
+		result.mat[3][0] += tx;
+		result.mat[3][1] += ty;
+		result.mat[3][2] += tz;
+		return result;
+	}
+
+
+	mat4 scale(const mat4& mat, vec3 vec) {
+		mat4 result = mat;
+		result.mat[0][0] *= vec.x;
+		result.mat[1][1] *= vec.y;
+		result.mat[2][2] *= vec.z;
 		return result;
 	}
 
@@ -40,9 +49,9 @@ namespace MathLib {
 
 	mat4 translate(const mat4& mat, vec3 vec) {
 		mat4 result = mat;
-		result.mat[0][3] = vec.x;
-		result.mat[1][3] = vec.y;
-		result.mat[2][3] = vec.z;
+		result.mat[3][0] += vec.x;
+		result.mat[3][1] += vec.y;
+		result.mat[3][2] += vec.z;
 
 		return result;
 	}
@@ -55,7 +64,9 @@ namespace MathLib {
 		result.mat[2][1] = sin(angle);
 		result.mat[2][2] = cos(angle);
 
-		return result * matrix;
+		result = result.transpose();
+
+		return result.transpose() * matrix;
 	}
 
 
@@ -67,6 +78,7 @@ namespace MathLib {
 		result.mat[2][0] = -sin(angle);
 		result.mat[2][2] = result.mat[0][0];
 
+		result = result.transpose();
 
 		return result * matrix;
 	}
@@ -79,6 +91,8 @@ namespace MathLib {
 		result.mat[0][1] = -sin(angle);
 		result.mat[1][0] = sin(angle);
 		result.mat[1][1] = cos(angle);
+		
+		result = result.transpose();
 
 		return result * matrix;
 	}
@@ -91,6 +105,8 @@ namespace MathLib {
 		result = translate(result, -point);
 		result = rotate(matrix, vec, angle);
 		result = translate(result, point);
+
+
 		return result * matrix;
 	}
 
@@ -116,6 +132,8 @@ namespace MathLib {
 		result.mat[2][0] = x * z * (1 - cosVal) - y * sinVal;
 		result.mat[2][1] = z * y * (1 - cosVal) + x * sinVal;
 		result.mat[2][2] = cosVal + z * z * (1 - cosVal);
+
+		result = result.transpose();
 
 		return result * matrix;
 	}

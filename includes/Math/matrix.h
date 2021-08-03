@@ -195,6 +195,8 @@ namespace MathLib {
 
 	mat4 translate(const mat4& mat, vec3 vec);
 
+	mat4 scale(const mat4& mat, vec3 vec);
+
 	mat4 rotateX(const mat4& matrix, float angle);
 
 	mat4 rotateY(const mat4& matrix, float angle);
