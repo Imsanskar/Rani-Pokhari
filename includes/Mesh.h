@@ -7,19 +7,19 @@
 #include <unordered_map>
 
 struct Vertex {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 texCoords;
+    MathLib::vec3 position;
+    MathLib::vec3 normal;
+    MathLib::vec2 texCoords;
     // tangent
-    glm::vec3 tangent;
+    MathLib::vec3 tangent;
     // bitangent
-    glm::vec3 bitangent;
+    MathLib::vec3 bitangent;
 };
 
 struct Material {
-    glm::vec3 diffuse;
-    glm::vec3 ambient;
-    glm::vec3 specular;
+    MathLib::vec3 diffuse;
+    MathLib::vec3 ambient;
+    MathLib::vec3 specular;
 };
 
 struct Mesh {

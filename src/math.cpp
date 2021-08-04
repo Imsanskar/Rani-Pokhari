@@ -103,14 +103,13 @@ namespace MathLib {
 		vec3 axis = vec.unitVector();
 
 		result = translate(result, -point);
-		result = rotate(matrix, vec, angle);
 		result = translate(result, point);
 
 
 		return result * matrix;
 	}
 
-	mat4 rotate(const mat4& matrix, const vec3& vec, const float angle) {
+	mat4 rotate(const mat4& matrix, const float angle, const vec3& vec) {
 		mat4 result(1.0f);
 		vec3 axis = vec.unitVector();
 
@@ -168,10 +167,15 @@ namespace MathLib {
 	}
 
 
-	mat4 projectionMatrix(float aspectRatio, float fov, float near = 0.1, float far = 100.0f){
+	mat4 perspective(float fov, float aspectRatio, float near, float far){
 		mat4 result;
 
-
+		float scale = 1.0 / tan(fov / 2);
+        result[0][0] = scale/aspectRatio; // scale the x coordinates
+        result[1][1] = scale; // scale the y coordinates
+        result[2][2] = -(far+near) / (far - near); // remap z to [0,1] 
+        result[2][3] = -1; 
+        result[3][2] = (2*far*near)/(near - far); 
 
 		return result;
 	}

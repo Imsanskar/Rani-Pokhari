@@ -7,19 +7,19 @@
 #define to_degrees(rad) ((rad) * (180.0f / PI))
 
 namespace MathLib {
-	union Vec2 {
+	union vec2 {
 		float m[2];
 
 		struct {
 			float x, y;
 		};
 
-		inline Vec2() {
+		inline vec2() {
 			x = 0;
 			y = 0;
 		}
-		inline Vec2(float a) { x = y = a; }
-		inline Vec2(float a, float b) { x = a; y = b; }
+		inline vec2(float a) { x = y = a; }
+		inline vec2(float a, float b) { x = a; y = b; }
 	};
 
 
