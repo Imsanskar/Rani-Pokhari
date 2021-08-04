@@ -159,7 +159,7 @@ int main() {
 	//projection matrix
 	MathLib::mat4 projection;
 	float fov = 45.0f;
-	projection = MathLib::perspective(to_radians(fov), (float)width / (float)height, 0.0001f, 100.0f);
+	projection = MathLib::perspective(to_radians(fov), (float)width / (float)height, 0.0001f, 1000.0f);
 	
 	//skybox shader uniform
 	skyBoxShader.bind();
@@ -198,7 +198,7 @@ int main() {
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
-		// renderer.draw(skyBoxVA, skyBoxShader, 36);
+		renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
