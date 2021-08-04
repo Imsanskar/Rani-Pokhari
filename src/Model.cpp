@@ -42,7 +42,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
 		Vertex vertex;
 		// process vertex positions, normals and texture coordinates
-		glm::vec3 vector;
+		MathLib::vec3 vector;
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
@@ -58,7 +58,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
 		// does the mesh contain texture coordinates
 		if (mesh->mTextureCoords[0]) {
-			glm::vec2 vec;
+			MathLib::vec2 vec;
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
 			vertex.texCoords = vec;
@@ -75,7 +75,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 			vertex.bitangent = vector;
 		}
 		else {
-			vertex.texCoords = glm::vec2(0.0f, 0.0f);
+			vertex.texCoords = MathLib::vec2(0.0f, 0.0f);
 		}
 
 		vertices.push_back(vertex);
@@ -113,13 +113,13 @@ Material Model::loadMaterial(aiMaterial* mat) {
 	float shininess;
 
 	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-	material.diffuse = glm::vec3(color.r, color.b, color.g);
+	material.diffuse = MathLib::vec3(color.r, color.b, color.g);
 
 	mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
-	material.ambient = glm::vec3(color.r, color.b, color.g);
+	material.ambient = MathLib::vec3(color.r, color.b, color.g);
 
 	mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
-	material.specular = glm::vec3(color.r, color.b, color.g);
+	material.specular = MathLib::vec3(color.r, color.b, color.g);
 
 	return material;
 }
