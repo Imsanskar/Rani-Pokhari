@@ -140,7 +140,7 @@
     <PostBuildEvent>
       <Command>if not exist "$(SolutionDir)build\assimpd.exe" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\assimpd.exe" "$(SolutionDir)build\assimpd.exe"
 if not exist "$(SolutionDir)build\zlib.dll" copy "$(SolutionDir)Dependencies\lib\$(Configuration)\zlib.dll" "$(SolutionDir)build\zlib.dll"
-</Command>
+if not exist "$(SolutionDir)build\assimp-vc142-mtd.dll" copy "$(SolutionDir)Dependencies\lib\Debug\assimp-vc142-mtd.dll" "$(SolutionDir)build\assimp-vc142-mtd.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

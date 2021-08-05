@@ -5,9 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <Math/matrix.h>
 
 struct Shader {
@@ -37,10 +34,8 @@ struct Shader {
 	
 	void setUniform(std::string name, float v0, float v1, float v2);
 
-	void setUniform(std::string name, glm::vec3 vec);
-
 	void setUniform(std::string name, MathLib::vec3 vec);
-	void setUniform(std::string name, glm::mat4 transform);
+
 	void setUniform(std::string name, MathLib::mat4 transform);
 
 	int GetUniformLocation(std::string& name);

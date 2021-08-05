@@ -28,16 +28,18 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/Dependencies/includes
 )
 
-add_executable(RaniPokhari src/main.cpp ${SRC} ${INCLUDES})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/build/)
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	message("You are on windows")
-	link_directories(${CMAKE_SOURCE_DIR}/Dependencies)
-	link_directories(${CMAKE_SOURCE_DIR}/Dependencies/Release)
-	target_link_libraries(RaniPokhari glfw3 opengl32 assimp-vc142-mt.lib assimp.lib zlibstatic.lib zlib.lib)
-	
+	link_directories(${CMAKE_SOURCE_DIR}/Dependencies/lib)
+	link_directories(${CMAKE_SOURCE_DIR}/Dependencies/lib/Release)
+
+	add_executable(RaniPokhari src/main.cpp ${SRC} ${INCLUDES})
+	target_link_libraries(RaniPokhari glfw3.lib opengl32 assimp-vc142-mt.lib assimp.lib zlibstatic.lib zlib.lib)
+
+
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	target_link_libraries(RaniPokhari glfw GL dl)

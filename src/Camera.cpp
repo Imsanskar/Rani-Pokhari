@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up, float _yaw, float _pitch)
+Camera::Camera(MathLib::vec3 position, MathLib::vec3 front, MathLib::vec3 up, float _yaw, float _pitch)
 	  :	cameraPosition(position.x, position.y, position.z),
 		cameraFront(front.x, front.y, front.z),
 		cameraUp(up.x, up.y, up.z),
@@ -48,9 +48,9 @@ void Camera::processMouseEvent(float xOffset, float yOffset, bool constrainScree
     }
     MathLib::vec3 front;
 
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.x = cos(to_radians(yaw)) * cos(to_radians(pitch));
+    front.y = sin(to_radians(pitch));
+    front.z = sin(to_radians(yaw)) * cos(to_radians(pitch));
 
 	cameraFront = MathLib::normalize(front);
 }
