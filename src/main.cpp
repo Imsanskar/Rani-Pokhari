@@ -70,8 +70,6 @@ int main() {
 		}
 	}
 
-	float c = 0.5f;
-
 	//For blending, i.e. for textures with RGBA values
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -84,10 +82,6 @@ int main() {
 	};
 
 
-	uint32_t indices[] = {  // note that we start from 0!
-		0, 1, 2,   // first triangle
-		1, 2, 3    // second triangle
-	};
 
 	Shader lightShader("../resources/shaders/light.glsl");
 	Shader lampShader("../resources/shaders/lamp.glsl");
@@ -165,7 +159,7 @@ int main() {
 	skyBoxShader.bind();
 	
 	//camera
-	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 0.0f, 3.0f);
+	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 0.0f, 2.0f);
 	MathLib::vec3 cameraFront = MathLib::vec3(0.0f, 0.0f, -1.0f);
 	MathLib::vec3 cameraUp = MathLib::vec3(0.0f, 1.0f, 0.0f);
 	Camera camera(cameraPos, cameraFront, cameraUp);
@@ -198,33 +192,32 @@ int main() {
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
-		renderer.draw(skyBoxVA, skyBoxShader, 36);
+		// renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
 		//setting for models
 		float angle = 0.0f;
 		float timeValue = (float)glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		float redValue = (cos(timeValue) / 2.0f) + 0.5f;
-		float blueValue = sin(timeValue) / 2.0f + 0.5f;
 		view = renderer.camera.GetLookAtMatrix();
+
+
 		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
 		MathLib::mat4 trans = MathLib::mat4(1.0f);
 		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
-		model = MathLib::translate(model, cubePositions[0]);
-		model = MathLib::mat4(1.0f);
+		model = MathLib::translate(model, MathLib::vec3(0.0f, -10.0f, -20.0f));
 		lightning.bind();
+		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = MathLib::mat4(1.0f);
 		trans = MathLib::translate(trans, MathLib::vec3(0.0f, -2.5f, -2.0f));
-		trans = MathLib::scale(trans, MathLib::vec3(00.05f, 00.05f, 00.05f));
+		trans = MathLib::scale(trans, MathLib::vec3(0.5f, 0.5f, 0.5f));
 		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
-		MathLib::vec3 sunpos = MathLib::vec3(0.0f, 10.0f, 0.0f); 			
+		MathLib::vec3 sunpos = MathLib::vec3(0.0f, 0.0f, 30.0f); 			
 		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
@@ -245,7 +238,7 @@ int main() {
 		lampShader.bind();
 		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
 		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(0.2f));
+		modelSun = MathLib::scale(modelSun, MathLib::vec3(0.5f));
 		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
 		lampShader.setUniform("model", modelSun);
 		lampShader.setUniform("projection", projection);
