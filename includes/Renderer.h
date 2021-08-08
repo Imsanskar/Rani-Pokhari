@@ -59,4 +59,5 @@ struct Renderer {
 struct UserContext {
 	Renderer *renderer;
 	float fov;
+	bool isNightMode;
 };
