@@ -63,9 +63,6 @@ uniform Material material;
 uniform PointLight light;
 uniform vec3 viewPos;
 
-//lights for open gl
-#define NR_POINT_LIGHTS 5  
-uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
@@ -93,7 +90,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 
     float distance    = length(light.position - fragPos);
-	const float consFac = 1.0, LinearFac = 0.7, quadFac= 1.8;
     float attenuation = 1.0 / (light.constant + light.linear * distance + 
   			    light.quadratic * (distance * distance));    
     ambient  *= attenuation;
@@ -103,6 +99,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 }
 
 
+//lights for open gl
+#define NR_POINT_LIGHTS 20 
+uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 void main()
 {
@@ -132,11 +131,12 @@ void main()
 
 
 	if(isNightMode == 0){
-    	result = (ambient + diffuse + specular) * 2;
+    	result = (ambient + diffuse + specular) * 1.8;
 	}
 	else{	
-		for(int i = 0; i < NR_POINT_LIGHTS; i++)
-	        result += CalcPointLight(pointLights[i], normal, FragPos, viewDir); 
+		for(int i = 0; i < NR_POINT_LIGHTS; i++){
+	       result += CalcPointLight(pointLights[i], normal, FragPos, viewDir); 
+		}
 	}
     FragColor = vec4(result, col_diffuse_2.w);
 
