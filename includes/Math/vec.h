@@ -149,7 +149,6 @@ namespace MathLib {
 
 
 	inline std::ostream& operator <<(std::ostream& os, vec3 vec){
-    	std::cout << "\nOutput in Row major order -> \n";
 		os << '(' << vec.x << ',' << vec.y << ',' << vec.z << ")\n";
     	return os << std::endl;
   	}
