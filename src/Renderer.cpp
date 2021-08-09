@@ -119,7 +119,7 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
 
-    float cameraSpeed = 1.5f * deltaTime;
+    float cameraSpeed = 3.5f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         camera.cameraPosition += cameraSpeed * MathLib::normalize(camera.cameraFront);
@@ -133,9 +133,15 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.cameraPosition += cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
     	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
-		context->isNightMode = !context->isNightMode;
+		context->isNightMode = true;
+		glfwSetWindowUserPointer(window, context);
+    }
+
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+    	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
+		context->isNightMode = false;
 		glfwSetWindowUserPointer(window, context);
     }
 }
