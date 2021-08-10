@@ -13,14 +13,16 @@ uniform mat4 projection;
 out vec2 TexCoords;
 out vec3 normal;
 out vec3 FragPos;
+out vec3 position;
 
 void main()
 {
     const vec4 vertexPos = model * vec4(aPos,1.0);
-     gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(vertexPos);
     normal = normalize(mat3(transpose(inverse(model))) * aNormal );
     TexCoords = aTexCoords;
+	position = vec3(gl_Position);
 }
 
 #shader fragment
@@ -30,6 +32,7 @@ uniform int isNightMode;
 
 in vec3 normal, FragPos;
 in vec2 TexCoords;
+in vec3 position;
 
 out vec4 FragColor;
 
@@ -58,6 +61,7 @@ struct PointLight {
 
 };
 
+uniform sampler2D depthBuffer;
 
 uniform Material material;
 uniform PointLight light;
@@ -105,6 +109,10 @@ uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 void main()
 {
+	float d = texture(depthBuffer, gl_FragCoord.xy).x;
+	//if (gl_FragCoord.z >= d) {
+	//  discard;
+	//}
 	vec3 result = vec3(0.0f);
     const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
     const vec4 col_diffuse_2 = texture(material.diffuse2, TexCoords);
