@@ -9,6 +9,7 @@ uniform mat4 trans;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec4 plane;
 
 out vec2 TexCoords;
 out vec3 normal;
@@ -18,6 +19,7 @@ out vec3 position;
 void main()
 {
     const vec4 vertexPos = model * vec4(aPos,1.0);
+	gl_ClipDistance[0] = dot(vertexPos, plane);
     gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(vertexPos);
     normal = normalize(mat3(transpose(inverse(model))) * aNormal );
@@ -66,6 +68,7 @@ uniform sampler2D depthBuffer;
 uniform Material material;
 uniform PointLight light;
 uniform vec3 viewPos;
+uniform int isReflection;
 
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -146,6 +149,13 @@ void main()
 	       result += CalcPointLight(pointLights[i], normal, FragPos, viewDir); 
 		}
 	}
-    FragColor = vec4(result, col_diffuse_2.w);
+	float alphaValue;
+	if(isReflection == 0){
+		alphaValue = col_diffuse_2.w;
+	}
+	else{
+		alphaValue = 0.9f;
+	}
+    FragColor = vec4(result, alphaValue);
 
 } 

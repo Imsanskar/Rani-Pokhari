@@ -8,7 +8,7 @@ Camera::Camera(MathLib::vec3 position, MathLib::vec3 front, MathLib::vec3 up, fl
         pitch(_pitch)
 {
     cameraRight = MathLib::normalize(MathLib::cross(cameraFront, cameraUp));
-    sensitivity = 0.75f;
+    sensitivity = 0.15f;
 }
 
 MathLib::mat4 Camera::GetLookAtMatrix() const{

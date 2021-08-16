@@ -47,30 +47,32 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 		 shader.setUniform("material.specular", material.specular);
 		 shader.setUniform("material.shininess", 32.0f);
 	 }
-    for (unsigned int i = 0; i < textures.size(); ++i){
-		glActiveTexture(GL_TEXTURE0 + i);
-        // retrieve texture number (the N in diffuse_textureN)
-		std::string number;
-        const std::string& textureType = textures[i].getType();
-        if (textureType == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-        else if (textureType == "texture_specular")
-            number = std::to_string(specularNr++); // transfer unsigned int to stream
-		else if (textureType == "texture_normal")
-			number = std::to_string(normalNr++); // transfer unsigned int to stream
-		else if (textureType == "texture_height")
-			number = std::to_string(heightNr++); // transfer unsigned int to stream
-        else
-            continue;
-		//shader.setUniform((("material." + textureType + number).c_str()), static_cast<int>(i));
-		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-		shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-		glCheckError(textures[i].bind(i));
+	else{
+		for (unsigned int i = 0; i < textures.size(); ++i){
+			glActiveTexture(GL_TEXTURE0 + i);
+			// retrieve texture number (the N in diffuse_textureN)
+			std::string number;
+			const std::string& textureType = textures[i].getType();
+			if (textureType == "texture_diffuse")
+				number = std::to_string(diffuseNr++);
+			else if (textureType == "texture_specular")
+				number = std::to_string(specularNr++); // transfer unsigned int to stream
+			else if (textureType == "texture_normal")
+				number = std::to_string(normalNr++); // transfer unsigned int to stream
+			else if (textureType == "texture_height")
+				number = std::to_string(heightNr++); // transfer unsigned int to stream
+			else
+				continue;
+			//shader.setUniform((("material." + textureType + number).c_str()), static_cast<int>(i));
+			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			glCheckError(textures[i].bind(i));
+		}
 	}
 	glCheckError(vao.bind());
-	glCheckError(glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL));
+	glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL);
 
 	glActiveTexture(GL_TEXTURE0);
 }

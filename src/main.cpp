@@ -5,6 +5,7 @@
 #include <tchar.h>
 #include <windows.h>
 #include <Lmcons.h>
+#include "WaterFrameBuffer.h"
 
 #define COMPOUND_LINEAR 0.014f
 #define COMPOUND_QUAD 0.007f
@@ -67,6 +68,8 @@ int main() {
 	glfwInit();
 
 	const int width = 1920, height = 1400;
+	Renderer::width = width;
+	Renderer::height = height;
 	float aspectRatio = float(width) / float(height);
 	//GLFWwindow* window = glfwCreateWindow(width, height, "OpenGl Project", glfwGetPrimaryMonitor(), NULL);
 	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGl Project", NULL, NULL);
@@ -85,7 +88,7 @@ int main() {
 
 	//context for the glfw window
 	UserContext context;
-	context.isNightMode = false;
+	context.isNightMode = true;
 
 
 	//get user name
@@ -222,36 +225,24 @@ int main() {
 	Shader modelShader("../resources/shaders/model.glsl");
 
 
-	Model temple("../resources/models/Raanipokhari.obj");
+	Model temple("../resources/models/Raanipokhari_stone base.obj");
+	Model templeOnly("../resources/models/mandir.obj");
+	Model stone("../resources/models/stone.obj");
 	Model water("../resources/models/water.obj");
 	Model sun("../resources/models/sun.obj");
 
 
-	//shadow
-	unsigned int depthMapFBO;
-	glGenFramebuffers(1, &depthMapFBO);
+	WaterFrameBuffer waterFBO;
+	waterFBO.initReflectionFrameBuffer();
+	// waterFBO.initRefractionFrameBuffer();
+	waterFBO.unbind();
 
-	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	unsigned int depthMap;
-
-	glGenTextures(1, &depthMap);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
-	             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 	
-
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0); 
+	bool renderToTextureFlag;
 
 	while (!glfwWindowShouldClose(window)) {
 		if(context.isNightMode){
 			// std::cout << "Camera Position:" << renderer.camera.cameraPosition << std::endl;
+			// std::cout << "Camera Direction:" << renderer.camera.cameraFront << std::endl;
 		}
 
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -289,7 +280,6 @@ int main() {
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
 		lightning.setUniform("lightMatrix", model);
-		lightning.setUniform("model", model * trans);
 		lightning.setUniform("projection", projection);
 		lightning.setUniform("view", view);
 		lightning.setUniform("material.shininess", 64.0f);
@@ -486,7 +476,36 @@ int main() {
 		lightning.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		lightning.setUniform("light.position", sunpos);
 
+		waterFBO.bindReflectionFrameBuffer();
+		MathLib::mat4 reflect(0.5f);
+		reflect[1][1] = -1.0f;
+		reflect = reflect * trans;
+		lightning.setUniform("model", model * reflect);
+		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		lightning.setUniform("plane", 0, 1, 0, -15);
+		templeOnly.render(lightning, true);
+		waterFBO.unbind();
+		waterFBO.unbind();
+		lightning.setUniform("model", model * trans);
+		glDisable(GL_CLIP_DISTANCE0);
+		lightning.setUniform("plane", 0, -1, 0, 30);
+		lightning.setUniform("isReflection", static_cast<int>(0));
 		temple.render(lightning, true);
+		stone.render(lightning, true);
+		reflect = MathLib::mat4(1.0f);
+		reflect[1][1] = -1.0f;
+		reflect = reflect * trans;
+		reflect = MathLib::translate(reflect, MathLib::vec3(0.0f, 1.0f, 0.0f));
+		reflect[1][1] *= -1.0f;
+
+		//view matrix for relflection so that the relection is fix
+		MathLib::mat4 reflectionView = MathLib::lookAt(MathLib::vec3(0, 10, 70), MathLib::vec3(-0.055, -0.011, -1.0), MathLib::vec3(0.0f, 1.0f, 0.0f)); 
+		MathLib::mat4 projectionReflection = MathLib::perspective(fov / 10, aspectRatio, 1.0f, 5.0f);
+
+		lightning.setUniform("model", model * reflect);
+		lightning.setUniform("view", reflectionView);
+		lightning.setUniform("isReflection", static_cast<int>(1));
+		// templeOnly.render(lightning, true);
 		lightning.unbind();
 
 
@@ -506,7 +525,6 @@ int main() {
 		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
 		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		waterShader.setUniform("light.position", sunpos);
-
 
 		glCheckError(water.render(waterShader, true));
 		waterShader.unbind();
