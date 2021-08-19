@@ -115,8 +115,8 @@ int main() {
 
 	if (true) {
 		std::string str((char*)vendor);
-		if (str.find("NVIDIA") == std::string::npos) {
-			std::cout << "Use nvidia card unless you want to get bsod";
+		if (str.find("AMD") != std::string::npos) {
+			std::cout << "Use other card unless you want to get bsod";
 			exit(-1);
 		}
 	}
@@ -239,6 +239,7 @@ int main() {
 
 	bool renderToTextureFlag;
 
+	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
 		if(context.isNightMode){
 			// std::cout << "Camera Position:" << renderer.camera.cameraPosition << std::endl;

@@ -119,6 +119,8 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
 
+	// std::cout << "FPS->" << 1 / (deltaTime) << std::endl;
+
     float cameraSpeed = 3.5f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {

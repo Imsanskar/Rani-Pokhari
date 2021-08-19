@@ -72,7 +72,7 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 		}
 	}
 	glCheckError(vao.bind());
-	glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL);
+	glCheckError(glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL));
 
 	glActiveTexture(GL_TEXTURE0);
 }
