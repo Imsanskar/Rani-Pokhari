@@ -54,7 +54,7 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     Renderer::previousX = xPos;
     Renderer::previousY = yPos;
 
-    renderer->camera.processMouseEvent(xOffset, yOffset, true);
+    renderer->camera.processMouseEvent(xOffset, yOffset, false);
 
     glfwSetWindowUserPointer(window, context);
 }
@@ -119,7 +119,9 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
 
-    float cameraSpeed = 1.5f * deltaTime;
+	// std::cout << "FPS->" << 1 / (deltaTime) << std::endl;
+
+    float cameraSpeed = 3.5f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         camera.cameraPosition += cameraSpeed * MathLib::normalize(camera.cameraFront);
@@ -129,7 +131,19 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         camera.cameraPosition -= cameraSpeed * MathLib::normalize(camera.cameraFront);
-    }if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    }
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.cameraPosition += cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
+    }
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+    	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
+		context->isNightMode = true;
+		glfwSetWindowUserPointer(window, context);
+    }
+
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+    	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
+		context->isNightMode = false;
+		glfwSetWindowUserPointer(window, context);
     }
 }

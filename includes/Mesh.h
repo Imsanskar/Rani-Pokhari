@@ -5,6 +5,7 @@
 #include <VertexArray.h>
 #include <Renderer.h>
 #include <unordered_map>
+#include "framebuffer.h"
 
 struct Vertex {
     MathLib::vec3 position;

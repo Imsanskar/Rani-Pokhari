@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <iostream>
 
 #define PI 3.141519
 
@@ -145,4 +146,10 @@ namespace MathLib {
 	inline vec3 operator * (float val, const vec3& vec){
 		return vec3(vec.x * val, vec.y * val, vec.z * val);
 	}
+
+
+	inline std::ostream& operator <<(std::ostream& os, vec3 vec){
+		os << '(' << vec.x << ',' << vec.y << ',' << vec.z << ")\n";
+    	return os << std::endl;
+  	}
 }
