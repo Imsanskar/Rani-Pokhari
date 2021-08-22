@@ -2,9 +2,6 @@
 #include <iostream>
 #include <CubeMap.h>
 #include <Model.h>
-#include <tchar.h>
-#include <windows.h>
-#include <Lmcons.h>
 #include "WaterFrameBuffer.h"
 
 #define COMPOUND_LINEAR 0.014f
@@ -55,10 +52,10 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-extern "C"
-{
-	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-}
+// extern "C"
+// {
+// 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+// }
 
 
 
@@ -107,7 +104,7 @@ int main() {
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
 		std::string str((char*)vendor);
-		if (str.find("AMD") != std::string::npos) {
+		if (str.find("ATI") != std::string::npos) {
 			std::cout << "Use other card unless you want to get bsod";
 			exit(-1);
 		}
