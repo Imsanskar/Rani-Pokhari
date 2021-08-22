@@ -90,13 +90,6 @@ int main() {
 	UserContext context;
 	context.isNightMode = true;
 
-
-	//get user name
-	std::string username;
-	DWORD username_len = UNLEN + 1;
-	// int checkUserName = GetUserName((LPSTR)username.c_str(), &username_len);
-
-	printf("%s\n", username.c_str());
 	//open gl settings
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 4);
@@ -113,13 +106,11 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-	if (true) {
 		std::string str((char*)vendor);
 		if (str.find("AMD") != std::string::npos) {
 			std::cout << "Use other card unless you want to get bsod";
 			exit(-1);
 		}
-	}
 
 	//For blending, i.e. for textures with RGBA values
 	glEnable(GL_BLEND);
@@ -501,7 +492,7 @@ int main() {
 
 		//view matrix for relflection so that the relection is fix
 		MathLib::mat4 reflectionView = MathLib::lookAt(MathLib::vec3(0, 10, 70), MathLib::vec3(-0.055, -0.011, -1.0), MathLib::vec3(0.0f, 1.0f, 0.0f)); 
-		MathLib::mat4 projectionReflection = MathLib::perspective(fov / 10, aspectRatio, 1.0f, 5.0f);
+		MathLib::mat4 projectionReflection = MathLib::perspective(fov, aspectRatio, 1.0f, 5.0f);
 
 		lightning.setUniform("model", model * reflect);
 		lightning.setUniform("view", reflectionView);
