@@ -1,6 +1,4 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <Math/matrix.h>
 
 
@@ -19,7 +17,7 @@ struct Camera {
 
 	float yaw, pitch;
 
-	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float _yaw = -90.0f, float _pitch = 0.0f);
+	Camera(MathLib::vec3 position = MathLib::vec3(0.0f, 0.0f, 0.0f), MathLib::vec3 front = MathLib::vec3(0.0f, 0.0f, -1.0f), MathLib::vec3 up = MathLib::vec3(0.0f, 1.0f, 0.0f), float _yaw = -90.0f, float _pitch = 0.0f);
 
 	MathLib::mat4 GetLookAtMatrix() const;
 

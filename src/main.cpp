@@ -1,9 +1,5 @@
 ﻿#include <glad/glad.h>
 #include <iostream>
-#include <glm/glm.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <CubeMap.h>
 #include <Model.h>
 #include <tchar.h>
@@ -82,9 +78,9 @@ int main() {
 
 
 
-	glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
+	MathLib::vec3 cubePositions[] = {
+		MathLib::vec3(0.0f,  0.0f,  0.0f),
+		MathLib::vec3(2.0f,  5.0f, -15.0f),
 	};
 
 
@@ -161,17 +157,17 @@ int main() {
 
 	
 	//projection matrix
-	glm::mat4 projection;
+	MathLib::mat4 projection;
 	float fov = 45.0f;
-	projection = glm::perspective(glm::radians(fov), (float)width / (float)height, 0.0001f, 100.0f);
+	projection = MathLib::perspective(to_radians(fov), (float)width / (float)height, 0.0001f, 100.0f);
 	
 	//skybox shader uniform
 	skyBoxShader.bind();
 	
 	//camera
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 0.0f, 3.0f);
+	MathLib::vec3 cameraFront = MathLib::vec3(0.0f, 0.0f, -1.0f);
+	MathLib::vec3 cameraUp = MathLib::vec3(0.0f, 1.0f, 0.0f);
 	Camera camera(cameraPos, cameraFront, cameraUp);
 	renderer.camera = camera;
 
@@ -213,25 +209,23 @@ int main() {
 		float redValue = (cos(timeValue) / 2.0f) + 0.5f;
 		float blueValue = sin(timeValue) / 2.0f + 0.5f;
 		view = renderer.camera.GetLookAtMatrix();
-		projection = glm::perspective(glm::radians(context.fov), aspectRatio, 0.1f, 1000.0f);
-		glm::mat4 trans = glm::mat4(1.0f);
-		trans = glm::rotate(trans, (float)timeValue, glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		model = glm::translate(model, cubePositions[0]);
+		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
+		MathLib::mat4 trans = MathLib::mat4(1.0f);
+		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
-
-		model = glm::translate(model, cubePositions[0]);
-		model = glm::mat4(1.0f);
+		model = MathLib::translate(model, cubePositions[0]);
+		model = MathLib::mat4(1.0f);
 		lightning.bind();
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, -0.5f, 0.5f));
+		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
-		trans = glm::mat4(1.0f);
-		trans = glm::translate(trans, glm::vec3(0.0f, -2.5f, -2.0f));
-		trans = glm::scale(trans, glm::vec3(00.05f, 00.05f, 00.05f));
+		trans = MathLib::mat4(1.0f);
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, -2.5f, -2.0f));
+		trans = MathLib::scale(trans, MathLib::vec3(00.05f, 00.05f, 00.05f));
 		
 	
 		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		MathLib::vec3 sunpos = MathLib::vec3(0.0f, 10.0f, 0.0f); 			
+		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
 		lightning.setUniform("trans", trans);
 		lightning.setUniform("model", model);
 		lightning.setUniform("projection", projection);

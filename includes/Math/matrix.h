@@ -35,7 +35,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[i][j] + m.mat[i][j];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 
 
@@ -48,7 +48,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[i][j] - m.mat[i][j];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 
 		bool operator ==(mat3 m) {
@@ -75,7 +75,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[j][i];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 	};
 
@@ -132,7 +132,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[i][j] + m.mat[i][j];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 
 
@@ -145,7 +145,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[i][j] - m.mat[i][j];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 
 		bool operator ==(mat4 m) {
@@ -172,7 +172,7 @@ namespace MathLib {
 					result.mat[i][j] = mat[j][i];
 				}
 			}
-			return result.transpose();
+			return result;
 		}
 	};
 
@@ -203,7 +203,9 @@ namespace MathLib {
 
 	mat4 rotateZ(const mat4& matrix, float angle);
 
-	mat4 rotate(const mat4& matrix, const vec3& vec, const float angle);
+	mat4 rotate(const mat4& matrix, const float angle, const vec3& vec);
 
 	mat4 lookAt(const vec3& cameraPos, const vec3& target, const vec3& up);
+
+	mat4 perspective(float fov, float aspectRatio, float near = 0.1, float far = 100.0f);
 }
