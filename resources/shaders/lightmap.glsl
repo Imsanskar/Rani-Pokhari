@@ -154,7 +154,7 @@ void main()
 		alphaValue = col_diffuse_2.w;
 	}
 	else{
-		alphaValue = 0.9f;
+		alphaValue = 1.0f;
 	}
     FragColor = vec4(result, alphaValue);
 
