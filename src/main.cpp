@@ -52,10 +52,10 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-// extern "C"
-// {
-// 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-// }
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
 
 
 void setLightPosition(Shader& lightning){
@@ -487,6 +487,34 @@ int main() {
 		lightning.setUniform("plane", 0, -1, 0, 30);
 		lightning.setUniform("isReflection", static_cast<int>(0));
 		temple.render(lightning, true);
+		reflect = MathLib::mat4(1.0f);
+		reflect[1][1] = -1.0f;
+		reflect = reflect * trans;
+		reflect = MathLib::translate(reflect, MathLib::vec3(0.0f, 1.0f, 0.0f));
+		reflect[1][1] *= -1.0f;
+
+		//view matrix for relflection so that the relection is fix
+		MathLib::mat4 reflectionView = MathLib::lookAt(MathLib::vec3(0, 10, 70), MathLib::vec3(-0.055, -0.011, -1.0), MathLib::vec3(0.0f, 1.0f, 0.0f)); 
+
+		lightning.setUniform("model", model * reflect);
+		lightning.setUniform("isReflection", static_cast<int>(1));
+		templeOnly.render(lightning, true);
+
+
+
+		//stone render after reflection
+		lightning.setUniform("model", model * trans);
+		lightning.setUniform("isReflection", static_cast<int>(0));
+		// stone.render(lightning, true);
+		lightning.unbind();
+
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
+		waterShader.bind();
+		model = MathLib::mat4(1.0f);
+		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
+		angle = 0.0f;
 		trans = MathLib::mat4(1.0f);
 		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 2.0f, 0.0f));
 		// trans = MathLib::scale(trans, MathLib::vec3(0.4f, 0.4f, 0.4f));
