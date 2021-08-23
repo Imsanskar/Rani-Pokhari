@@ -1,5 +1,9 @@
 #shader vertex
 #version 440 core
+
+#define PI 3.14159f
+
+
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aTexCoords;
@@ -9,10 +13,52 @@ uniform mat4 trans;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float time;
 
 out vec2 TexCoords;
 out vec3 normal;
 out vec3 FragPos;
+
+
+float calculateWave(float x, float z, vec3 normal){
+	float wavelength;
+	float amplitude;
+	float speed;
+	float phase;
+	float result = 0.0f;
+	vec2 position = vec2(x, z);	
+	vec2 norm = vec2(normal.x, normal.z);
+	vec2 direction = vec2(1, 1); 
+
+	amplitude = 0.1f;
+	wavelength = 0.01f;
+	speed = 0.05;
+	phase = speed * 2 * PI / wavelength;
+	result += amplitude * sin(dot(direction, position) * 2 * PI / wavelength + time * phase);
+
+
+	amplitude = 0.05f;
+	wavelength = 0.02f;
+	speed = 0.07;
+	phase = speed * 2 * PI / wavelength;
+	result += amplitude * sin(dot(direction, position) * 2 * PI / wavelength + time * phase);
+
+
+	amplitude = 0.07f;
+	wavelength = 0.03f;
+	speed = 0.02;
+	phase = speed * 2 * PI / wavelength;
+	result += amplitude * sin(dot(direction, position) * 2 * PI / wavelength + time * phase);
+
+
+	amplitude = 0.4f;
+	wavelength = 0.03f;
+	speed = 0.05;
+	phase = speed * 2 * PI / wavelength;
+	result += amplitude * sin(dot(direction, position) * 2 * PI / wavelength + time * phase);
+
+	return result;
+}
 
 
 void main()
@@ -20,7 +66,7 @@ void main()
     const vec4 vertexPos = model * vec4(aPos,1.0);
      gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(vertexPos);
-    normal = normalize(mat3(transpose(inverse(model))) * aNormal );
+    normal = normalize(mat3(transpose(inverse(model))) * aNormal);
     TexCoords = aTexCoords;
 }
 
@@ -65,7 +111,7 @@ uniform PointLight light;
 uniform vec3 viewPos;
 
 //lights for open gl
-#define NR_POINT_LIGHTS 5  
+#define NR_POINT_LIGHTS 20 
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -95,8 +141,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     float distance    = length(light.position - fragPos);
 	const float consFac = 1.0, LinearFac = 0.7, quadFac= 1.8;
-    float attenuation = 1.0 / (light.constant + LinearFac * distance + 
-  			    quadFac * (distance * distance));    
+    float attenuation = 1.0 / (light.constant + light.linear * distance + 
+  			    light.quadratic * (distance * distance));    
     ambient  *= attenuation;
     diffuse  *= attenuation;
     specular *= attenuation;
@@ -131,14 +177,17 @@ void main()
     const float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     const vec3 specular = spec * light.specular * material_specular.rgb;
 
-
+	float alphaValue = 0.5f;
 	if(isNightMode == 0){
+		alphaValue = col_diffuse_1.w;
     	result = (ambient + diffuse + specular);
 	}
 	else{	
+		alphaValue = 0.4;
 		for(int i = 0; i < NR_POINT_LIGHTS; i++)
 	        result += CalcPointLight(pointLights[i], normal, FragPos, viewDir); 
 	}
-    FragColor = vec4(vec3(result), 0.3f);
+	alphaValue = 0.7f;
+    FragColor = vec4(vec3(result), alphaValue);
 
 } 

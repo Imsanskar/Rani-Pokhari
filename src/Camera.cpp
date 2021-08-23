@@ -8,7 +8,7 @@ Camera::Camera(MathLib::vec3 position, MathLib::vec3 front, MathLib::vec3 up, fl
         pitch(_pitch)
 {
     cameraRight = MathLib::normalize(MathLib::cross(cameraFront, cameraUp));
-    sensitivity = 0.15f;
+    sensitivity = 0.25f;
 }
 
 MathLib::mat4 Camera::GetLookAtMatrix() const{
@@ -16,7 +16,7 @@ MathLib::mat4 Camera::GetLookAtMatrix() const{
 }
 
 void Camera::processKeyboardEvent(CameraDirection direction, float deltaTime){
-    float cameraSpeed = sensitivity * deltaTime;
+    float cameraSpeed = 0.4 * deltaTime;
 
     if (direction == CameraDirection::FORWARD) {
         cameraPosition += cameraSpeed * cameraFront.unitVector();
