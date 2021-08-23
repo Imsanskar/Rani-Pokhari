@@ -7,8 +7,8 @@ Camera::Camera(MathLib::vec3 position, MathLib::vec3 front, MathLib::vec3 up, fl
         yaw(_yaw),
         pitch(_pitch)
 {
-    //cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
-    sensitivity = 0.2f;
+    cameraRight = MathLib::normalize(MathLib::cross(cameraFront, cameraUp));
+    sensitivity = 0.15f;
 }
 
 MathLib::mat4 Camera::GetLookAtMatrix() const{

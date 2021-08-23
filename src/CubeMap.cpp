@@ -1,4 +1,4 @@
-#include "..\includes\CubeMap.h"
+#include "CubeMap.h"
 
 CubeMap::CubeMap(std::vector<std::string> faces):texture(GL_TEXTURE_CUBE_MAP){
 	texture.bind();

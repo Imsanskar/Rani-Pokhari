@@ -177,7 +177,6 @@ namespace MathLib {
 	};
 
 	 inline std::ostream& operator<<(std::ostream& os, mat4 matrix){
-    	std::cout << "\nOutput in Row major order -> \n";
     	for (int i = 0; i < 4; ++i)
     	{
     	  for (int j = 0; j < 4; ++j)
@@ -208,4 +207,6 @@ namespace MathLib {
 	mat4 lookAt(const vec3& cameraPos, const vec3& target, const vec3& up);
 
 	mat4 perspective(float fov, float aspectRatio, float near = 0.1, float far = 100.0f);
+
+	mat4 ortho(float left, float right, float bottom, float top, float near = 0.1, float far = 100.0f);
 }
