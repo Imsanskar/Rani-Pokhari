@@ -42,5 +42,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	target_link_libraries(RaniPokhari glfw GL dl)
+	add_executable(RaniPokhari src/main.cpp ${SRC} ${INCLUDES})
+	target_link_libraries(RaniPokhari glfw GL dl assimp)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
