@@ -14,7 +14,7 @@
 
 
 #define SPECULAR 0.8
-MathLib::vec3 sunpos = MathLib::vec3(3.0f, 10.0f, 50.0f); 			
+MathLib::vec3 sunpos = MathLib::vec3(30.0f, 100.0f, 500.0f); 			
 
 MathLib::vec3 pointLightsPositions[] = {
 	//door lights
@@ -52,11 +52,198 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-// extern "C"
-// {
-// 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-// }
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
 
+
+void setLightPosition(Shader& lightning){
+	lightning.bind();
+	//gajur lights
+	lightning.setUniform("pointLights[0].position", pointLightsPositions[0]);
+	lightning.setUniform("pointLights[0].constant", 1.0f);
+	lightning.setUniform("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[0].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[0].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[0].linear", 0.7f);
+	lightning.setUniform("pointLights[0].quadratic", 1.8f);
+
+	lightning.setUniform("pointLights[1].position", pointLightsPositions[1]);
+	lightning.setUniform("pointLights[1].constant", 1.0f);
+	lightning.setUniform("pointLights[1].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[1].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[1].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[1].linear", 0.7f);
+	lightning.setUniform("pointLights[1].quadratic", 1.8f);
+
+	
+	lightning.setUniform("pointLights[2].position", pointLightsPositions[2]);
+	lightning.setUniform("pointLights[2].constant", 1.0f);
+	lightning.setUniform("pointLights[2].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[2].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[2].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[2].linear", 0.7f);
+	lightning.setUniform("pointLights[2].quadratic", 1.8f);
+
+
+	lightning.setUniform("pointLights[3].position", pointLightsPositions[3]);
+	lightning.setUniform("pointLights[3].constant", 1.0f);
+	lightning.setUniform("pointLights[3].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[3].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[3].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[3].linear", 0.7f);
+	lightning.setUniform("pointLights[3].quadratic", 1.8f);
+
+	//compound lights
+	lightning.setUniform("pointLights[4].position", pointLightsPositions[4]);
+	lightning.setUniform("pointLights[4].constant", 1.0f);
+	lightning.setUniform("pointLights[4].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[4].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[4].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[4].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[4].quadratic", COMPOUND_QUAD);
+
+	lightning.setUniform("pointLights[5].position", pointLightsPositions[5]);
+	lightning.setUniform("pointLights[5].constant", 1.0f);
+	lightning.setUniform("pointLights[5].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[5].diffuse", COMPOUND_LIGHT); 
+	lightning.setUniform("pointLights[5].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[5].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[5].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[6].position", pointLightsPositions[6]);
+	lightning.setUniform("pointLights[6].constant", 1.0f);
+	lightning.setUniform("pointLights[6].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[6].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[6].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[6].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[6].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[7].position", pointLightsPositions[7]);
+	lightning.setUniform("pointLights[7].constant", 1.0f);
+	lightning.setUniform("pointLights[7].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[7].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[7].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[7].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[7].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[8].position", pointLightsPositions[8]);
+	lightning.setUniform("pointLights[8].constant", 1.0f);
+	lightning.setUniform("pointLights[8].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[8].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[8].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[8].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[8].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[9].position", pointLightsPositions[9]);
+	lightning.setUniform("pointLights[9].constant", 1.0f);
+	lightning.setUniform("pointLights[9].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[9].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[9].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[9].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[9].quadratic", COMPOUND_QUAD);
+	
+
+	lightning.setUniform("pointLights[10].position", pointLightsPositions[10]);
+	lightning.setUniform("pointLights[10].constant", 1.0f);
+	lightning.setUniform("pointLights[10].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[10].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[10].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[10].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[10].quadratic", COMPOUND_QUAD);
+	
+	
+	lightning.setUniform("pointLights[10].position", pointLightsPositions[10]);
+	lightning.setUniform("pointLights[10].constant", 1.0f);
+	lightning.setUniform("pointLights[10].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[10].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[10].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[10].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[10].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[11].position", pointLightsPositions[11]);
+	lightning.setUniform("pointLights[11].constant", 1.0f);
+	lightning.setUniform("pointLights[11].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[11].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[11].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[11].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[11].quadratic", COMPOUND_QUAD);
+
+	lightning.setUniform("pointLights[12].position", pointLightsPositions[12]);
+	lightning.setUniform("pointLights[12].constant", 1.0f);
+	lightning.setUniform("pointLights[12].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[12].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[12].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[12].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[12].quadratic", COMPOUND_QUAD);
+
+
+	lightning.setUniform("pointLights[13].position", pointLightsPositions[13]);
+	lightning.setUniform("pointLights[13].constant", 1.0f);
+	lightning.setUniform("pointLights[13].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[13].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[13].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[13].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[13].quadratic", COMPOUND_QUAD);
+
+	lightning.setUniform("pointLights[14].position", pointLightsPositions[14]);
+	lightning.setUniform("pointLights[14].constant", 1.0f);
+	lightning.setUniform("pointLights[14].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[14].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[14].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[14].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[14].quadratic", COMPOUND_QUAD);
+
+	lightning.setUniform("pointLights[15].position", pointLightsPositions[15]);
+	lightning.setUniform("pointLights[15].constant", 1.0f);
+	lightning.setUniform("pointLights[15].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[15].diffuse", 0.3, 0.3, 0.3); // darken diffuse light a bit
+	lightning.setUniform("pointLights[15].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[15].linear", COMPOUND_LINEAR);
+	lightning.setUniform("pointLights[15].quadratic", COMPOUND_QUAD);
+
+	//gajur lights
+	lightning.setUniform("pointLights[16].position", pointLightsPositions[16]);
+	lightning.setUniform("pointLights[16].constant", 1.0f);
+	lightning.setUniform("pointLights[16].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[16].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[16].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[16].linear", GAJUR_LINEAR);
+	lightning.setUniform("pointLights[16].quadratic", GAJUR_QUAD);
+
+	lightning.setUniform("pointLights[17].position", pointLightsPositions[17]);
+	lightning.setUniform("pointLights[17].constant", 1.0f);
+	lightning.setUniform("pointLights[17].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[17].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[17].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[17].linear", GAJUR_LINEAR);
+	lightning.setUniform("pointLights[17].quadratic", GAJUR_QUAD);
+
+
+	lightning.setUniform("pointLights[18].position", pointLightsPositions[18]);
+	lightning.setUniform("pointLights[18].constant", 1.0f);
+	lightning.setUniform("pointLights[18].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[18].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[18].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[18].linear", GAJUR_LINEAR);
+	lightning.setUniform("pointLights[18].quadratic", GAJUR_QUAD);
+
+
+	lightning.setUniform("pointLights[19].position", pointLightsPositions[19]);
+	lightning.setUniform("pointLights[19].constant", 1.0f);
+	lightning.setUniform("pointLights[19].ambient", 0.2f, 0.2f, 0.2f);
+	lightning.setUniform("pointLights[19].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
+	lightning.setUniform("pointLights[19].specular", SPECULAR, SPECULAR,SPECULAR);
+	lightning.setUniform("pointLights[19].linear", GAJUR_LINEAR);
+	lightning.setUniform("pointLights[19].quadratic", GAJUR_QUAD);
+
+}
 
 
 int main() {
@@ -103,11 +290,11 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-		std::string str((char*)vendor);
-		if (str.find("ATI") != std::string::npos) {
-			std::cout << "Use other card unless you want to get bsod";
-			exit(-1);
-		}
+	std::string str((char*)vendor);
+	if (str.find("ATI") != std::string::npos) {
+		std::cout << "Use other card unless you want to get bsod";
+		exit(-1);
+	}
 
 	//For blending, i.e. for textures with RGBA values
 	glEnable(GL_BLEND);
@@ -195,7 +382,7 @@ int main() {
 	skyBoxShader.bind();
 	
 	//camera
-	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 10.0f,70.0f);
+	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 60.0f,100.0f);
 	// MathLib::vec3 cameraPos = MathLib::vec3(54.11,3.92044,-55.4537);
 	MathLib::vec3 cameraFront = MathLib::vec3(0.0f, 0.0f, -1.0f);
 	MathLib::vec3 cameraUp = MathLib::vec3(0.0f, 1.0f, 0.0f);
@@ -213,7 +400,10 @@ int main() {
 	Shader modelShader("../resources/shaders/model.glsl");
 
 
-	Model temple("../resources/models/Raanipokhari_stone base.obj");
+	// Model temple("../resources/models/Raanipokhari_stone base.obj");
+	std::cout << "Started\n";
+	Model temple("../resources/models/RaanipokhariWithtree.obj");
+	std::cout << "Finished\n";
 	Model templeOnly("../resources/models/mandir.obj");
 	Model stone("../resources/models/stone.obj");
 	Model water("../resources/models/water.obj");
@@ -244,7 +434,7 @@ int main() {
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
-		// renderer.draw(skyBoxVA, skyBoxShader, 36);
+		renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
@@ -276,189 +466,7 @@ int main() {
 
 		lightning.setUniform("isNightMode", (int)context.isNightMode);		
 
-
-		//door lights
-		lightning.setUniform("pointLights[0].position", pointLightsPositions[0]);
-		lightning.setUniform("pointLights[0].constant", 1.0f);
-		lightning.setUniform("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[0].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[0].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[0].linear", 0.7f);
-		lightning.setUniform("pointLights[0].quadratic", 1.8f);
-
-		lightning.setUniform("pointLights[1].position", pointLightsPositions[1]);
-		lightning.setUniform("pointLights[1].constant", 1.0f);
-		lightning.setUniform("pointLights[1].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[1].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[1].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[1].linear", 0.7f);
-		lightning.setUniform("pointLights[1].quadratic", 1.8f);
-
-		
-		lightning.setUniform("pointLights[2].position", pointLightsPositions[2]);
-		lightning.setUniform("pointLights[2].constant", 1.0f);
-		lightning.setUniform("pointLights[2].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[2].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[2].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[2].linear", 0.7f);
-		lightning.setUniform("pointLights[2].quadratic", 1.8f);
-
-
-		lightning.setUniform("pointLights[3].position", pointLightsPositions[3]);
-		lightning.setUniform("pointLights[3].constant", 1.0f);
-		lightning.setUniform("pointLights[3].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[3].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[3].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[3].linear", 0.7f);
-		lightning.setUniform("pointLights[3].quadratic", 1.8f);
-
-		//compound lights
-		lightning.setUniform("pointLights[4].position", pointLightsPositions[4]);
-		lightning.setUniform("pointLights[4].constant", 1.0f);
-		lightning.setUniform("pointLights[4].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[4].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[4].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[4].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[4].quadratic", COMPOUND_QUAD);
-
-		lightning.setUniform("pointLights[5].position", pointLightsPositions[5]);
-		lightning.setUniform("pointLights[5].constant", 1.0f);
-		lightning.setUniform("pointLights[5].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[5].diffuse", COMPOUND_LIGHT); 
-		lightning.setUniform("pointLights[5].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[5].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[5].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[6].position", pointLightsPositions[6]);
-		lightning.setUniform("pointLights[6].constant", 1.0f);
-		lightning.setUniform("pointLights[6].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[6].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[6].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[6].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[6].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[7].position", pointLightsPositions[7]);
-		lightning.setUniform("pointLights[7].constant", 1.0f);
-		lightning.setUniform("pointLights[7].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[7].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[7].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[7].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[7].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[8].position", pointLightsPositions[8]);
-		lightning.setUniform("pointLights[8].constant", 1.0f);
-		lightning.setUniform("pointLights[8].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[8].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[8].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[8].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[8].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[9].position", pointLightsPositions[9]);
-		lightning.setUniform("pointLights[9].constant", 1.0f);
-		lightning.setUniform("pointLights[9].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[9].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[9].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[9].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[9].quadratic", COMPOUND_QUAD);
-		
-
-		lightning.setUniform("pointLights[10].position", pointLightsPositions[10]);
-		lightning.setUniform("pointLights[10].constant", 1.0f);
-		lightning.setUniform("pointLights[10].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[10].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[10].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[10].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[10].quadratic", COMPOUND_QUAD);
-		
-		
-		lightning.setUniform("pointLights[10].position", pointLightsPositions[10]);
-		lightning.setUniform("pointLights[10].constant", 1.0f);
-		lightning.setUniform("pointLights[10].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[10].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[10].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[10].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[10].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[11].position", pointLightsPositions[11]);
-		lightning.setUniform("pointLights[11].constant", 1.0f);
-		lightning.setUniform("pointLights[11].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[11].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[11].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[11].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[11].quadratic", COMPOUND_QUAD);
-
-		lightning.setUniform("pointLights[12].position", pointLightsPositions[12]);
-		lightning.setUniform("pointLights[12].constant", 1.0f);
-		lightning.setUniform("pointLights[12].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[12].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[12].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[12].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[12].quadratic", COMPOUND_QUAD);
-
-
-		lightning.setUniform("pointLights[13].position", pointLightsPositions[13]);
-		lightning.setUniform("pointLights[13].constant", 1.0f);
-		lightning.setUniform("pointLights[13].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[13].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[13].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[13].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[13].quadratic", COMPOUND_QUAD);
-
-		lightning.setUniform("pointLights[14].position", pointLightsPositions[14]);
-		lightning.setUniform("pointLights[14].constant", 1.0f);
-		lightning.setUniform("pointLights[14].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[14].diffuse", COMPOUND_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[14].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[14].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[14].quadratic", COMPOUND_QUAD);
-
-		lightning.setUniform("pointLights[15].position", pointLightsPositions[15]);
-		lightning.setUniform("pointLights[15].constant", 1.0f);
-		lightning.setUniform("pointLights[15].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[15].diffuse", 0.3, 0.3, 0.3); // darken diffuse light a bit
-		lightning.setUniform("pointLights[15].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[15].linear", COMPOUND_LINEAR);
-		lightning.setUniform("pointLights[15].quadratic", COMPOUND_QUAD);
-
-		//gajur lights
-		lightning.setUniform("pointLights[16].position", pointLightsPositions[16]);
-		lightning.setUniform("pointLights[16].constant", 1.0f);
-		lightning.setUniform("pointLights[16].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[16].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[16].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[16].linear", GAJUR_LINEAR);
-		lightning.setUniform("pointLights[16].quadratic", GAJUR_QUAD);
-
-		lightning.setUniform("pointLights[17].position", pointLightsPositions[17]);
-		lightning.setUniform("pointLights[17].constant", 1.0f);
-		lightning.setUniform("pointLights[17].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[17].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[17].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[17].linear", GAJUR_LINEAR);
-		lightning.setUniform("pointLights[17].quadratic", GAJUR_QUAD);
-
-
-		lightning.setUniform("pointLights[18].position", pointLightsPositions[18]);
-		lightning.setUniform("pointLights[18].constant", 1.0f);
-		lightning.setUniform("pointLights[18].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[18].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[18].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[18].linear", GAJUR_LINEAR);
-		lightning.setUniform("pointLights[18].quadratic", GAJUR_QUAD);
-
-
-		lightning.setUniform("pointLights[19].position", pointLightsPositions[19]);
-		lightning.setUniform("pointLights[19].constant", 1.0f);
-		lightning.setUniform("pointLights[19].ambient", 0.2f, 0.2f, 0.2f);
-		lightning.setUniform("pointLights[19].diffuse", GAJUR_LIGHT); // darken diffuse light a bit
-		lightning.setUniform("pointLights[19].specular", SPECULAR, SPECULAR,SPECULAR);
-		lightning.setUniform("pointLights[19].linear", GAJUR_LINEAR);
-		lightning.setUniform("pointLights[19].quadratic", GAJUR_QUAD);
+		setLightPosition(lightning);
 		//sun light
 		lightning.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightning.setUniform("light.diffuse", 0.3f, 0.3f, 0.3f); // darken diffuse light a bit
@@ -474,13 +482,11 @@ int main() {
 		lightning.setUniform("plane", 0, 1, 0, -15);
 		templeOnly.render(lightning, true);
 		waterFBO.unbind();
-		waterFBO.unbind();
 		lightning.setUniform("model", model * trans);
 		glDisable(GL_CLIP_DISTANCE0);
 		lightning.setUniform("plane", 0, -1, 0, 30);
 		lightning.setUniform("isReflection", static_cast<int>(0));
 		temple.render(lightning, true);
-		stone.render(lightning, true);
 		reflect = MathLib::mat4(1.0f);
 		reflect[1][1] = -1.0f;
 		reflect = reflect * trans;
@@ -489,15 +495,22 @@ int main() {
 
 		//view matrix for relflection so that the relection is fix
 		MathLib::mat4 reflectionView = MathLib::lookAt(MathLib::vec3(0, 10, 70), MathLib::vec3(-0.055, -0.011, -1.0), MathLib::vec3(0.0f, 1.0f, 0.0f)); 
-		MathLib::mat4 projectionReflection = MathLib::perspective(fov, aspectRatio, 1.0f, 5.0f);
 
 		lightning.setUniform("model", model * reflect);
-		lightning.setUniform("view", reflectionView);
 		lightning.setUniform("isReflection", static_cast<int>(1));
-		// templeOnly.render(lightning, true);
+		templeOnly.render(lightning, true);
+
+
+
+		//stone render after reflection
+		lightning.setUniform("model", model * trans);
+		lightning.setUniform("isReflection", static_cast<int>(0));
+		// stone.render(lightning, true);
 		lightning.unbind();
 
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
 		waterShader.bind();
 		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
@@ -514,7 +527,9 @@ int main() {
 		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
 		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		waterShader.setUniform("light.position", sunpos);
-
+		waterShader.setUniform("isNightMode", context.isNightMode);
+		waterShader.setUniform("time",  timeValue);
+		setLightPosition(waterShader);
 		glCheckError(water.render(waterShader, true));
 		waterShader.unbind();
 
