@@ -6,6 +6,7 @@
 #include <Renderer.h>
 #include <unordered_map>
 #include "framebuffer.h"
+#include "zbuffer.hpp"
 
 struct Vertex {
     MathLib::vec3 position;
@@ -38,5 +39,5 @@ struct Mesh {
 
     void setupMesh();
 
-    void draw(Shader& shader, bool isTextureModel = true) const;
+    void draw(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isTextureModel = true) const;
 };

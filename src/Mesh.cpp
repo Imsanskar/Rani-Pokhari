@@ -33,7 +33,22 @@ void Mesh::setupMesh(){
 }
 
 
-void Mesh::draw(Shader& shader, bool isTextureModel) const{
+void Mesh::draw(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isTextureModel) const{
+	vao.bind();
+ 	glBindFramebuffer(GL_FRAMEBUFFER,zrender.depthFBO);   
+ 	glUseProgram(zprogram);
+ 	glUniform1i(glGetUniformLocation(zprogram,"zbuffer"),0);
+ 	glActiveTexture(GL_TEXTURE0);
+
+ 	glBindTexture(GL_TEXTURE_2D,zrender.activeDepth);
+
+ 	for (int j = 0; j < indices.size()/3; j++)
+    	glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,reinterpret_cast<void*>(j*3*sizeof(unsigned int)));
+
+	glBindFramebuffer(GL_FRAMEBUFFER,zrender.colorFBO);
+	glUseProgram(shader.rendererID);
+
+	
     // bind appropriate textures
     unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -42,7 +57,7 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 
 	shader.bind();
 	std::string type;
-	 if(!isTextureModel){
+	if(!isTextureModel){
 		 shader.setUniform("material.ambient", material.ambient);
 		 shader.setUniform("material.diffuse", material.diffuse);
 		 shader.setUniform("material.specular", material.specular);
@@ -78,8 +93,12 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 			glCheckError(textures[i].bind(i));
 		}
 	}
-	glCheckError(vao.bind());
-	glCheckError(glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL));
-
-	glActiveTexture(GL_TEXTURE0);
+	zrender.bindBuffers(shader.rendererID);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	
+	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	//glCheckError(vao.bind());
+	//glCheckError(glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, NULL));
+	//
+	//glActiveTexture(GL_TEXTURE0);
 }

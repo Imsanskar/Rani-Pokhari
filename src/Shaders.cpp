@@ -129,3 +129,37 @@ int Shader::GetUniformLocation(std::string& name){
 Shader::~Shader(){
 	glDeleteProgram(rendererID);
 }
+
+int CompileAndLogShader(const std::string& path, GLuint shader_type)
+{
+    std::ifstream read_file {path.data(), std::ios::in};
+    if (read_file.fail())
+    {
+	std::cout << "Failed to open shader file " << path.data() << std::endl;
+	return -1;
+    }
+
+    std::string temp;
+    std::stringstream content;
+    while (std::getline(read_file,temp))
+	content << temp << '\n';
+
+    auto shader = glCreateShader(shader_type);
+    auto str = content.str();
+    auto c_str = str.c_str();
+    glShaderSource(shader,1,&c_str,NULL);
+    glCompileShader(shader);
+
+    int success;
+    glGetShaderiv(shader,GL_COMPILE_STATUS,&success);
+    if (!success)
+    {
+	char infoLog[512];
+	glGetShaderInfoLog(shader,512,nullptr,infoLog);
+	std::cerr << "\nFailed to compile " << (shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader" << infoLog << std::endl;
+	return -1;
+    }
+    else
+	std::cerr << '\n' << (shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader compilation passed." << std::endl;
+    return shader;
+}

@@ -42,3 +42,5 @@ struct Shader {
 
 	~Shader();
 };
+
+int CompileAndLogShader(const std::string& path, GLuint shader_type);

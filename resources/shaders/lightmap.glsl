@@ -111,7 +111,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 void main()
-{
+{    
+	vec4 color = texture(depthBuffer,gl_FragCoord.xy/800.0f);
+    float prev_depth = color.x;
+    float new_depth = pow(gl_FragCoord.z, 50);
 	float d = texture(depthBuffer, gl_FragCoord.xy).x;
 	//if (gl_FragCoord.z >= d) {
 	//  discard;

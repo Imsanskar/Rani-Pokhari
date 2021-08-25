@@ -3,6 +3,7 @@
 #include <CubeMap.h>
 #include <Model.h>
 #include "WaterFrameBuffer.h"
+#include "zbuffer.hpp"
 
 #define COMPOUND_LINEAR 0.014f
 #define COMPOUND_QUAD 0.007f
@@ -428,6 +429,14 @@ int main() {
 	bool renderToTextureFlag;
 	float moveFactor = 0.0f;
 
+
+	//zbuffer code  // Manual depth buffering
+  auto zrender = ZRender(width,height);
+  auto zprogram = glCreateProgram();
+  auto zvertex  = CompileAndLogShader("../resources/shaders/zvertex.glsl",GL_VERTEX_SHADER);
+  glAttachShader(zprogram,zvertex);
+  zrender.attachDepthFragment(zprogram);
+
 	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
 		if(context.logMode){
@@ -437,6 +446,8 @@ int main() {
 
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	    zrender.clearBG(0.25f,0.25f,0.25f,1.0f);
+	    zrender.clearDepth();
 
 		glDepthMask(GL_FALSE);
 		//skybox
@@ -502,7 +513,7 @@ int main() {
 		lightning.setUniform("isReflection", static_cast<int>(0));
 
 		//translate
-		temple.render(lightning, true);
+		temple.render(lightning, zprogram, zrender, true);
 		reflect = MathLib::mat4(1.0f);
 		// reflect[1][1] = -1.0f;
 		reflect = reflect*trans;
@@ -514,7 +525,7 @@ int main() {
 
 		lightning.setUniform("model", model * reflect);
 		lightning.setUniform("isReflection", static_cast<int>(1));
-		templeOnly.render(lightning, true);
+		templeOnly.render(lightning, zprogram, zrender, true);
 
 
 
@@ -522,7 +533,7 @@ int main() {
 		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 1.5f, 0.0));
 		lightning.setUniform("model", model * trans);
 		lightning.setUniform("isReflection", static_cast<int>(0));
-		// stone.render(lightning, true);
+		// stone.render(lightning, zprogram, zrender, true);
 		lightning.unbind();
 
 
@@ -557,7 +568,7 @@ int main() {
 		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
 		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
 		setLightPosition(waterShader);
-		glCheckError(water.render(waterShader, true));
+		// glCheckError(water.render(waterShader,zprogram, zrender, true));
 		waterShader.unbind();
 
 		//////property of sun or lamp
@@ -572,10 +583,10 @@ int main() {
 		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
 		//render the sun only in day mode
 		if(!context.isNightMode)
-			glCheckError(sun.render(lampShader, true));
+			glCheckError(sun.render(lampShader,zprogram, zrender,  true));
 		lampShader.unbind();
 
-
+		zrender.draw();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		renderer.processKeyboardInput(window);

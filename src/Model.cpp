@@ -16,9 +16,9 @@ void Model::loadModel(std::string path) {
 	processNode(scene->mRootNode, scene);
 }
 
-void Model::render(Shader& shader, bool isTexture) {
+void Model::render(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isTexture) {
 	for (int i = 0; i < meshes.size(); i++) {
-		meshes[i].draw(shader, isTexture);
+		meshes[i].draw(shader,zprogram,zrender, isTexture);
 	}
 }
 
