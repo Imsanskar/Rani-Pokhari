@@ -114,6 +114,7 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, 1);
     }
+    UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
 
     float currentTime = glfwGetTime();
     deltaTime = currentTime - lastFrame;
@@ -121,7 +122,7 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
 
 	// std::cout << "FPS->" << 1 / (deltaTime) << std::endl;
 
-    float cameraSpeed = 3.5f * deltaTime;
+    float cameraSpeed = context->sensitivity * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         camera.cameraPosition += cameraSpeed * MathLib::normalize(camera.cameraFront);
@@ -136,14 +137,31 @@ void Renderer::processKeyboardInput(GLFWwindow* window){
         camera.cameraPosition += cameraSpeed * MathLib::normalize(MathLib::cross(camera.cameraFront, camera.cameraUp));
     }
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-    	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
 		context->isNightMode = true;
-		glfwSetWindowUserPointer(window, context);
+    }
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+		context->isNightMode = false;
     }
 
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-    	UserContext* context = (UserContext*)glfwGetWindowUserPointer(window);
-		context->isNightMode = false;
-		glfwSetWindowUserPointer(window, context);
+	//for log mode
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+		context->logMode = false;
     }
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		context->logMode = true;
+    }
+
+	//increase the speed of camera
+	if(glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS && context->sensitivity > 0.5){
+		context->sensitivity -= 0.5;
+		if(context->logMode)
+			std::cout << "Sensitivity: " << context->sensitivity << std::endl;
+	}
+	if(glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS && context->sensitivity < 10.0){
+		context->sensitivity += 0.5;
+		if(context->logMode)
+			std::cout << "Sensitivity: " << context->sensitivity << std::endl;
+	}
+
+	glfwSetWindowUserPointer(window, context);
 }

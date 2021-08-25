@@ -60,4 +60,6 @@ struct UserContext {
 	Renderer *renderer;
 	float fov;
 	bool isNightMode;
+	bool logMode;
+	float sensitivity;
 };

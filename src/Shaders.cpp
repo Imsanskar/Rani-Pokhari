@@ -57,6 +57,7 @@ int Shader::compileShader(std::string shaderSource, unsigned int type) const {
 			(type == GL_VERTEX_SHADER ? " vertex" : " fragment") << " shader\n";
 		std::cout << infoLog << std::endl;
 		glDeleteShader(id);
+		exit(-1);
 		return 0;
 	}
 	return id;
