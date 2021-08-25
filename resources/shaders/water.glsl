@@ -67,7 +67,7 @@ void main()
      gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(vertexPos);
     normal = normalize(mat3(transpose(inverse(model))) * aNormal);
-    TexCoords = aTexCoords;
+    TexCoords = vec2(aTexCoords.x/2.0 + 0.5, aTexCoords.y/2.0 + 0.5) * 6.0;
 }
 
 #shader fragment
@@ -109,17 +109,24 @@ struct PointLight {
 uniform Material material;
 uniform PointLight light;
 uniform vec3 viewPos;
+uniform sampler2D dudv;
+uniform sampler2D reflectionTexture;
+uniform float moveFactor;
 
 //lights for open gl
+#define waveStrength 0.15
 #define NR_POINT_LIGHTS 20 
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
-    const vec4 col_diffuse_2 = texture(material.diffuse2, TexCoords);
-    const vec4 col_diffuse_3 = texture(material.diffuse3, TexCoords);
-    const vec4 col_diffuse_4 = texture(material.diffuse4, TexCoords);
+	vec2 distortion = (texture(dudv, vec2(TexCoords.x + moveFactor, TexCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;
+	vec2 texDistortedCoord = TexCoords + distortion;
+	vec3 result = vec3(0.0f);
+	const vec4 col_diffuse_1 = texture(material.diffuse1, texDistortedCoord);
+    const vec4 col_diffuse_2 = texture(material.diffuse2, texDistortedCoord);
+    const vec4 col_diffuse_3 = texture(material.diffuse3, texDistortedCoord);
+    const vec4 col_diffuse_4 = texture(material.diffuse4, texDistortedCoord);
     const vec4 temp1=mix(col_diffuse_1, col_diffuse_2, 0.5);
     const vec4 temp2=mix(col_diffuse_3, col_diffuse_4, 0.5);
 
@@ -153,11 +160,13 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 void main()
 {
+	vec2 distortion = (texture(dudv, vec2(TexCoords.x + moveFactor, TexCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;
+	vec2 texDistortedCoord = TexCoords + distortion;
 	vec3 result = vec3(0.0f);
-	const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
-    const vec4 col_diffuse_2 = texture(material.diffuse2, TexCoords);
-    const vec4 col_diffuse_3 = texture(material.diffuse3, TexCoords);
-    const vec4 col_diffuse_4 = texture(material.diffuse4, TexCoords);
+	const vec4 col_diffuse_1 = texture(material.diffuse1, texDistortedCoord);
+    const vec4 col_diffuse_2 = texture(material.diffuse2, texDistortedCoord);
+    const vec4 col_diffuse_3 = texture(material.diffuse3, texDistortedCoord);
+    const vec4 col_diffuse_4 = texture(material.diffuse4, texDistortedCoord);
     const vec4 temp1=mix(col_diffuse_1, col_diffuse_2, 0.5);
     const vec4 temp2=mix(col_diffuse_3, col_diffuse_4, 0.5);
 
@@ -168,8 +177,8 @@ void main()
     const float diff = max(dot(normal, lightDir), 0.0);
     const vec3 diffuse = diff * light.diffuse * material_diffuse.rgb;
 
-    const vec4 col_specular_1 = texture(material.specular1, TexCoords);
-    const vec4 col_specular_2 = texture(material.specular2, TexCoords);
+    const vec4 col_specular_1 = texture(material.specular1, texDistortedCoord);
+    const vec4 col_specular_2 = texture(material.specular2, texDistortedCoord);
     const vec4 material_specular = col_specular_1 * col_specular_2;
 
     const vec3 viewDir = normalize(viewPos - FragPos);
@@ -177,17 +186,18 @@ void main()
     const float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     const vec3 specular = spec * light.specular * material_specular.rgb;
 
-	float alphaValue = 0.5f;
+	float alphaValue = dot(viewDir, normalize(normal));
 	if(isNightMode == 0){
-		alphaValue = col_diffuse_1.w;
+		alphaValue = pow(dot(viewDir, normal), 1);
     	result = (ambient + diffuse + specular);
 	}
 	else{	
-		alphaValue = 0.4;
+		alphaValue = 0.5;
 		for(int i = 0; i < NR_POINT_LIGHTS; i++)
 	        result += CalcPointLight(pointLights[i], normal, FragPos, viewDir); 
 	}
-	alphaValue = 0.7f;
+	if(alphaValue < 0.3f){
+		alphaValue = 0.3f;
+	}
     FragColor = vec4(vec3(result), alphaValue);
-
 } 
