@@ -41,6 +41,7 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 	unsigned int normalNr = 1;
 
 	shader.bind();
+	std::string type;
 	 if(!isTextureModel){
 		 shader.setUniform("material.ambient", material.ambient);
 		 shader.setUniform("material.diffuse", material.diffuse);
@@ -53,21 +54,27 @@ void Mesh::draw(Shader& shader, bool isTextureModel) const{
 			// retrieve texture number (the N in diffuse_textureN)
 			std::string number;
 			const std::string& textureType = textures[i].getType();
-			if (textureType == "texture_diffuse")
+			if (textureType == "texture_diffuse"){
 				number = std::to_string(diffuseNr++);
-			else if (textureType == "texture_specular")
+				type = "diffuse";
+			}
+			else if (textureType == "texture_specular"){
 				number = std::to_string(specularNr++); // transfer unsigned int to stream
-			else if (textureType == "texture_normal")
+				type = "specular";
+			}
+			else if (textureType == "texture_normal"){
 				number = std::to_string(normalNr++); // transfer unsigned int to stream
+				type = "normal";
+			}
 			else if (textureType == "texture_height")
 				number = std::to_string(heightNr++); // transfer unsigned int to stream
 			else
 				continue;
 			//shader.setUniform((("material." + textureType + number).c_str()), static_cast<int>(i));
-			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
-			shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			shader.setUniform(("material."+ type + number), static_cast<int>(i));
+			// shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			// shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
+			// shader.setUniform(("material.diffuse" + number), static_cast<int>(i));
 			glCheckError(textures[i].bind(i));
 		}
 	}

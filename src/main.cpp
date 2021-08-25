@@ -272,7 +272,9 @@ int main() {
 
 	//context for the glfw window
 	UserContext context;
-	context.isNightMode = true;
+	context.isNightMode = false;
+	context.logMode = false;
+	context.sensitivity= 4.0;
 
 	//open gl settings
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
@@ -305,6 +307,9 @@ int main() {
 	Shader lampShader("../resources/shaders/lamp.glsl");
 	Shader lightning("../resources/shaders/lightmap.glsl");
 	Shader waterShader("../resources/shaders/water.glsl");
+
+	//dudvmap texture
+	Texture dudv("../resources/textures/dudv.png");
 
 
 	//vertices for skybox
@@ -373,11 +378,16 @@ int main() {
 	skyBoxVA.addBuffer(skyBoxVB, skyBoxLayout);
 
 	
+
 	//projection matrix
 	MathLib::mat4 projection;
 	float fov = 45.0f;
 	projection = MathLib::perspective(to_radians(fov), (float)width / (float)height, 0.00000001f, 100.0f);
-	
+
+	//reflection matrix
+	MathLib::mat4 reflect(1.0f);
+
+
 	//skybox shader uniform
 	skyBoxShader.bind();
 	
@@ -416,10 +426,11 @@ int main() {
 	waterFBO.unbind();
 
 	bool renderToTextureFlag;
+	float moveFactor = 0.0f;
 
 	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
-		if(context.isNightMode){
+		if(context.logMode){
 			// std::cout << "Camera Position:" << renderer.camera.cameraPosition << std::endl;
 			// std::cout << "Camera Direction:" << renderer.camera.cameraFront << std::endl;
 		}
@@ -473,24 +484,29 @@ int main() {
 		lightning.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		lightning.setUniform("light.position", sunpos);
 
-		waterFBO.bindReflectionFrameBuffer();
-		MathLib::mat4 reflect(0.5f);
-		reflect[1][1] = -1.0f;
-		reflect = reflect * trans;
-		lightning.setUniform("model", model * reflect);
-		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		lightning.setUniform("plane", 0, 1, 0, -15);
-		templeOnly.render(lightning, true);
-		waterFBO.unbind();
+		//write into framebuffer
+		// waterFBO.bindReflectionFrameBuffer();
+		// // reflect = MathLib::scale(reflect, MathLib::vec3(0.5, 0.5f, 0.0));
+		// reflect[1][1] = -1.0f;
+		// reflect = reflect * trans;
+		// lightning.setUniform("model", model * reflect);
+		// renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// lightning.setUniform("plane", 0, 1, 0, -15);
+		// temple.render(lightning, true);
+		// waterFBO.unbind();
+
+
 		lightning.setUniform("model", model * trans);
 		glDisable(GL_CLIP_DISTANCE0);
 		lightning.setUniform("plane", 0, -1, 0, 30);
 		lightning.setUniform("isReflection", static_cast<int>(0));
+
+		//translate
 		temple.render(lightning, true);
 		reflect = MathLib::mat4(1.0f);
-		reflect[1][1] = -1.0f;
-		reflect = reflect * trans;
-		reflect = MathLib::translate(reflect, MathLib::vec3(0.0f, 1.0f, 0.0f));
+		// reflect[1][1] = -1.0f;
+		reflect = reflect*trans;
+		reflect = MathLib::translate(reflect, MathLib::vec3(0.0f, 5.3f, 2.0f));
 		reflect[1][1] *= -1.0f;
 
 		//view matrix for relflection so that the relection is fix
@@ -503,6 +519,7 @@ int main() {
 
 
 		//stone render after reflection
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 1.5f, 0.0));
 		lightning.setUniform("model", model * trans);
 		lightning.setUniform("isReflection", static_cast<int>(0));
 		// stone.render(lightning, true);
@@ -516,8 +533,11 @@ int main() {
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
 		angle = 0.0f;
 		trans = MathLib::mat4(1.0f);
-		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 2.0f, 0.0f));
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 0.8f, 0.0f));
 		// trans = MathLib::scale(trans, MathLib::vec3(0.4f, 0.4f, 0.4f));
+		//wave speed calculation
+		float waveSpeed = 0.04f;
+		moveFactor += waveSpeed * timeValue; 
 		waterShader.setUniform("model", model * trans);
 		waterShader.setUniform("projection", projection);
 		waterShader.setUniform("view", view);
@@ -528,7 +548,14 @@ int main() {
 		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		waterShader.setUniform("light.position", sunpos);
 		waterShader.setUniform("isNightMode", context.isNightMode);
-		waterShader.setUniform("time",  timeValue);
+		waterShader.setUniform("moveFactor",  timeValue * waveSpeed);
+
+		glActiveTexture(GL_TEXTURE0 + 1);
+		waterShader.setUniform("dudv", static_cast<int>(1));
+		dudv.bind(1);
+		glActiveTexture(GL_TEXTURE0 + 2);
+		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
 		setLightPosition(waterShader);
 		glCheckError(water.render(waterShader, true));
 		waterShader.unbind();
