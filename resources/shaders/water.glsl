@@ -117,6 +117,9 @@ uniform float moveFactor;
 #define waveStrength 0.15
 #define NR_POINT_LIGHTS 20 
 uniform PointLight pointLights[NR_POINT_LIGHTS];
+uniform sampler2D depthBuffer;
+uniform sampler2D prevBuffer;
+
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
@@ -160,6 +163,11 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 void main()
 {
+	const float width = 800.0f;
+	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
+    float prev_depth = color.x;
+    float new_depth = pow(gl_FragCoord.z, 50);
+
 	vec2 distortion = (texture(dudv, vec2(TexCoords.x + moveFactor, TexCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;
 	vec2 texDistortedCoord = TexCoords + distortion;
 	vec3 result = vec3(0.0f);
@@ -199,5 +207,10 @@ void main()
 	if(alphaValue < 0.3f){
 		alphaValue = 0.3f;
 	}
-    FragColor = vec4(vec3(result), alphaValue);
+    if (new_depth <= prev_depth + 0.0025f){
+  	  FragColor = vec4(result, alphaValue);
+	}
+	else{
+		FragColor = texture(prevBuffer,gl_FragCoord.xy/width);
+	}
 } 

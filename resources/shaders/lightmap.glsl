@@ -112,7 +112,8 @@ uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 void main()
 {    
-	vec4 color = texture(depthBuffer,gl_FragCoord.xy/800.0f);
+	const float width = 800.0f;
+	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
     float prev_depth = color.x;
     float new_depth = pow(gl_FragCoord.z, 50);
 
@@ -157,10 +158,10 @@ void main()
 		alphaValue = 0.5f;
 		result *= vec3(0.6); 
 	}
-    if (new_depth <= prev_depth + 0.0025f){
+    if (new_depth <= prev_depth + 0.0030f){
   	  FragColor = vec4(result, alphaValue);
 	}
 	else{
-			FragColor = texture(prevBuffer,gl_FragCoord.xy/800.0f);
+		FragColor = texture(prevBuffer,gl_FragCoord.xy/width);
 	}
 } 

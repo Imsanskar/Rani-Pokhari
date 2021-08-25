@@ -47,6 +47,7 @@ void Mesh::draw(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isT
 
 	glBindFramebuffer(GL_FRAMEBUFFER,zrender.colorFBO);
 	glUseProgram(shader.rendererID);
+	shader.bind();
 
 	
     // bind appropriate textures

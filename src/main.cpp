@@ -252,7 +252,7 @@ int main() {
 
 	glfwInit();
 
-	const int width = 1920, height = 1400;
+	const int width = 800, height = 800;
 	Renderer::width = width;
 	Renderer::height = height;
 	float aspectRatio = float(width) / float(height);
@@ -459,16 +459,27 @@ int main() {
 		renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
+		
+		
+		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
+		MathLib::mat4 trans = MathLib::mat4(1.0f);
+		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		view = renderer.camera.GetLookAtMatrix();
+
+		zrender.clearDepth();
+
+		glUseProgram(zprogram);
+ 	   update_uniform_matrix_4f("model", zprogram, model.value_ptr());
+ 	   update_uniform_matrix_4f("projection", zprogram, projection.value_ptr());//projection.value_ptr());
+ 	   update_uniform_matrix_4f("view", zprogram, view.value_ptr());
+
+		zrender.clearDepth();
 
 		//setting for models
 		float angle = 0.0f;
 		float timeValue = (float)glfwGetTime();
-		view = renderer.camera.GetLookAtMatrix();
 
 
-		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
-		MathLib::mat4 trans = MathLib::mat4(1.0f);
-		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
 
 		glActiveTexture(GL_TEXTURE0);
@@ -545,7 +556,6 @@ int main() {
 
 
 		lightning.setUniform("model", model * trans);
-		glDisable(GL_CLIP_DISTANCE0);
 		lightning.setUniform("plane", 0, -1, 0, 30);
 		lightning.setUniform("isReflection", static_cast<int>(0));
 
