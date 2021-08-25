@@ -400,7 +400,7 @@ int main() {
 	Camera camera(cameraPos, cameraFront, cameraUp);
 	renderer.camera = camera;
 
-	glEnable(GL_DEPTH_TEST);
+	// glEnable(GL_DEPTH_TEST);
 
 	context.renderer = &renderer;
 	context.fov = fov;
@@ -446,7 +446,7 @@ int main() {
 
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	    zrender.clearBG(0.25f,0.25f,0.25f,1.0f);
+	    zrender.clearBG(0.0f, 0.0f, 0.0f, 1.0f);
 	    zrender.clearDepth();
 
 		glDepthMask(GL_FALSE);
@@ -469,6 +469,43 @@ int main() {
 		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
 		MathLib::mat4 trans = MathLib::mat4(1.0f);
 		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
+		waterShader.bind();
+		model = MathLib::mat4(1.0f);
+		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
+		angle = 0.0f;
+		trans = MathLib::mat4(1.0f);
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 0.8f, 0.0f));
+		// trans = MathLib::scale(trans, MathLib::vec3(0.4f, 0.4f, 0.4f));
+		//wave speed calculation
+		float waveSpeed = 0.04f;
+		moveFactor += waveSpeed * timeValue; 
+		waterShader.setUniform("model", model * trans);
+		waterShader.setUniform("projection", projection);
+		waterShader.setUniform("view", view);
+		waterShader.setUniform("material.shininess", 128.0f);
+		waterShader.setUniform("viewPos", camera.cameraPosition);
+		waterShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
+		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
+		waterShader.setUniform("light.position", sunpos);
+		waterShader.setUniform("isNightMode", context.isNightMode);
+		waterShader.setUniform("moveFactor",  timeValue * waveSpeed);
+
+		glActiveTexture(GL_TEXTURE0 + 1);
+		waterShader.setUniform("dudv", static_cast<int>(1));
+		dudv.bind(1);
+		glActiveTexture(GL_TEXTURE0 + 2);
+		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
+		setLightPosition(waterShader);
+		glCheckError(water.render(waterShader,zprogram, zrender, true));
+		waterShader.unbind();
+
+
 
 		lightning.bind();
 		model = MathLib::mat4(1.0f);
@@ -525,7 +562,7 @@ int main() {
 
 		lightning.setUniform("model", model * reflect);
 		lightning.setUniform("isReflection", static_cast<int>(1));
-		templeOnly.render(lightning, zprogram, zrender, true);
+		// templeOnly.render(lightning, zprogram, zrender, true);
 
 
 
@@ -537,39 +574,7 @@ int main() {
 		lightning.unbind();
 
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
-		waterShader.bind();
-		model = MathLib::mat4(1.0f);
-		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
-		angle = 0.0f;
-		trans = MathLib::mat4(1.0f);
-		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 0.8f, 0.0f));
-		// trans = MathLib::scale(trans, MathLib::vec3(0.4f, 0.4f, 0.4f));
-		//wave speed calculation
-		float waveSpeed = 0.04f;
-		moveFactor += waveSpeed * timeValue; 
-		waterShader.setUniform("model", model * trans);
-		waterShader.setUniform("projection", projection);
-		waterShader.setUniform("view", view);
-		waterShader.setUniform("material.shininess", 128.0f);
-		waterShader.setUniform("viewPos", camera.cameraPosition);
-		waterShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
-		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
-		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
-		waterShader.setUniform("light.position", sunpos);
-		waterShader.setUniform("isNightMode", context.isNightMode);
-		waterShader.setUniform("moveFactor",  timeValue * waveSpeed);
 
-		glActiveTexture(GL_TEXTURE0 + 1);
-		waterShader.setUniform("dudv", static_cast<int>(1));
-		dudv.bind(1);
-		glActiveTexture(GL_TEXTURE0 + 2);
-		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
-		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
-		setLightPosition(waterShader);
-		// glCheckError(water.render(waterShader,zprogram, zrender, true));
-		waterShader.unbind();
 
 		//////property of sun or lamp
 		lampShader.bind();

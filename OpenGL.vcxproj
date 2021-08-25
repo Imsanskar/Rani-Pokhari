@@ -199,6 +199,7 @@ if not exist ".\bin\$(Platform)\$(Configuration)\zlib.dll" copy ".\Dependencies\
     <ClInclude Include="includes\VertexBuffer.h" />
     <ClInclude Include="includes\VertxBufferLayout.h" />
     <ClInclude Include="includes\WaterFrameBuffer.h" />
+    <ClInclude Include="includes\zbuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

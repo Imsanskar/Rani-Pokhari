@@ -63,13 +63,13 @@ struct PointLight {
 
 };
 
-uniform sampler2D depthBuffer;
 
 uniform Material material;
 uniform PointLight light;
 uniform vec3 viewPos;
 uniform int isReflection;
-
+uniform sampler2D depthBuffer;
+uniform sampler2D prevBuffer;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
@@ -115,10 +115,7 @@ void main()
 	vec4 color = texture(depthBuffer,gl_FragCoord.xy/800.0f);
     float prev_depth = color.x;
     float new_depth = pow(gl_FragCoord.z, 50);
-	float d = texture(depthBuffer, gl_FragCoord.xy).x;
-	//if (gl_FragCoord.z >= d) {
-	//  discard;
-	//}
+
 	vec3 result = vec3(0.0f);
     const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
     const vec4 col_diffuse_2 = texture(material.diffuse2, TexCoords);
@@ -160,6 +157,10 @@ void main()
 		alphaValue = 0.5f;
 		result *= vec3(0.6); 
 	}
-    FragColor = vec4(result, alphaValue);
-
+    if (new_depth <= prev_depth + 0.0025f){
+  	  FragColor = vec4(result, alphaValue);
+	}
+	else{
+			FragColor = texture(prevBuffer,gl_FragCoord.xy/800.0f);
+	}
 } 
