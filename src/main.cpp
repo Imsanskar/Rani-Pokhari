@@ -526,6 +526,8 @@ int main() {
 		lightning.unbind();
 
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
 		waterShader.bind();
 		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
