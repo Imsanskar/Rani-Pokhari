@@ -432,8 +432,9 @@ int main() {
 	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
 		if(context.logMode){
-			// std::cout << "Camera Position:" << renderer.camera.cameraPosition << std::endl;
-			// std::cout << "Camera Direction:" << renderer.camera.cameraFront << std::endl;
+			std::cout << "Camera Position: " << renderer.camera.cameraPosition << std::endl;
+			std::cout << "Camera Direction: " << renderer.camera.cameraFront << std::endl;
+			std::cout << "Camera right: " << renderer.camera.cameraRight << std::endl;
 		}
 
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -2113,7 +2113,7 @@ stbi_inline static int stbi__jpeg_get_bits(stbi__jpeg *j, int n)
 }
 
 stbi_inline static int stbi__jpeg_get_bit(stbi__jpeg *j)
-{
+    {
    unsigned int k;
    if (j->code_bits < 1) stbi__grow_buffer_unsafe(j);
    k = j->code_buffer;
