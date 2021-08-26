@@ -19,8 +19,7 @@ out vec3 position;
 void main()
 {
     const vec4 vertexPos = model * vec4(aPos,1.0);
-	gl_ClipDistance[0] = dot(vertexPos, plane);
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * vertexPos;
     FragPos = vec3(vertexPos);
     normal = normalize(mat3(transpose(inverse(model))) * aNormal );
     TexCoords = aTexCoords;
@@ -115,7 +114,7 @@ void main()
 	const float width = 800.0f;
 	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
     float prev_depth = color.x;
-    float new_depth = pow(gl_FragCoord.z, 50);
+    float new_depth = pow(gl_FragCoord.z, 70);
 
 	vec3 result = vec3(0.0f);
     const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
@@ -158,7 +157,7 @@ void main()
 		alphaValue = 0.5f;
 		result *= vec3(0.6); 
 	}
-    if (new_depth <= prev_depth + 0.0030f){
+    if (new_depth <= prev_depth + 0.0020f){
   	  FragColor = vec4(result, alphaValue);
 	}
 	else{

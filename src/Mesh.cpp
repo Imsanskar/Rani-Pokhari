@@ -46,7 +46,7 @@ void Mesh::draw(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isT
     	glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,reinterpret_cast<void*>(j*3*sizeof(unsigned int)));
 
 	glBindFramebuffer(GL_FRAMEBUFFER,zrender.colorFBO);
-	glUseProgram(shader.rendererID);
+	// glUseProgram(shader.rendererID);
 	shader.bind();
 
 	
@@ -95,7 +95,7 @@ void Mesh::draw(Shader& shader, unsigned int zprogram,ZRender& zrender, bool isT
 		}
 	}
 	zrender.bindBuffers(shader.rendererID);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, ibo.count, GL_UNSIGNED_INT, 0);
 	
 	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	//glCheckError(vao.bind());

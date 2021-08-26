@@ -166,7 +166,7 @@ void main()
 	const float width = 800.0f;
 	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
     float prev_depth = color.x;
-    float new_depth = pow(gl_FragCoord.z, 50);
+    float new_depth = pow(gl_FragCoord.z, 70);
 
 	vec2 distortion = (texture(dudv, vec2(TexCoords.x + moveFactor, TexCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;
 	vec2 texDistortedCoord = TexCoords + distortion;

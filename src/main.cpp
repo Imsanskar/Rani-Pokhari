@@ -445,7 +445,7 @@ int main() {
 		}
 
 		//renderer.clear(0.6f, 0.8f, 0.8f, 1.0f, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderer.clear(GL_COLOR_BUFFER_BIT);
 	    zrender.clearBG(0.0f, 0.0f, 0.0f, 1.0f);
 	    zrender.clearDepth();
 
@@ -482,8 +482,6 @@ int main() {
 
 
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
 		waterShader.bind();
 		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
@@ -598,7 +596,7 @@ int main() {
 		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
 		//render the sun only in day mode
 		if(!context.isNightMode)
-			glCheckError(sun.render(lampShader,zprogram, zrender,  true));
+			// glCheckError(sun.render(lampShader,zprogram, zrender,  true));
 		lampShader.unbind();
 
 		zrender.draw();
