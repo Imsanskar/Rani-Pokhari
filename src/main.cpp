@@ -461,22 +461,26 @@ int main() {
 		skyBoxShader.unbind();
 		
 		
+		float angle = 0.0f;
 		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
 		MathLib::mat4 trans = MathLib::mat4(1.0f);
 		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
+		angle = 0.0f;
+		trans = MathLib::mat4(1.0f);
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, -2.5f, -2.0f));
 		view = renderer.camera.GetLookAtMatrix();
 
 		zrender.clearDepth();
 
 		glUseProgram(zprogram);
- 	   update_uniform_matrix_4f("model", zprogram, model.value_ptr());
+ 	   update_uniform_matrix_4f("model", zprogram, (model * trans).value_ptr());
  	   update_uniform_matrix_4f("projection", zprogram, projection.value_ptr());//projection.value_ptr());
  	   update_uniform_matrix_4f("view", zprogram, view.value_ptr());
 
 		zrender.clearDepth();
 
 		//setting for models
-		float angle = 0.0f;
 		float timeValue = (float)glfwGetTime();
 
 
