@@ -569,7 +569,7 @@ int main() {
 		lampShader.bind();
 		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
 		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(0.25f));
+		modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
 		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
 		lampShader.setUniform("model", modelSun);
 		lampShader.setUniform("projection", projection);
