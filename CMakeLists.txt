@@ -31,7 +31,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	message("Build type: ${CMAKE_BUILD_TYPE}")
 	link_directories(${CMAKE_SOURCE_DIR}/Dependencies/lib)
 
-	set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib")
+	set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib assimp.lib zlibstatic.lib zlib.lib")
 	if(${CMAKE_BUILD_TYPE} MATCHES "Release")
 		set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib assimp.lib zlibstatic.lib zlib.lib")
 	elseif(${CMAKE_BUILD_TYPE} MATCHES "Debug")

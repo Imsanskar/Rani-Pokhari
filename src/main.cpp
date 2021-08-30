@@ -274,7 +274,7 @@ int main() {
 
 	//context for the glfw window
 	UserContext context;
-	context.isNightMode = false;
+	context.isNightMode = true;
 	context.logMode = false;
 	context.sensitivity= 4.0;
 
@@ -283,7 +283,7 @@ int main() {
 	glfwWindowHint(GLFW_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1); // Enable vsync
+	// glfwSwapInterval(1); // Enable vsync
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -326,7 +326,7 @@ int main() {
 	MathLib::mat4 reflect(1.0f);
 	
 	//camera
-	MathLib::vec3 cameraPos = MathLib::vec3(-0.605878,8.59639,19.1869);
+	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 60.0f,100.0f);
 	// MathLib::vec3 cameraPos = MathLib::vec3(54.11,3.92044,-55.4537);
 	MathLib::vec3 cameraFront = MathLib::vec3(0.0f, 0.0f, -1.0f);
 	MathLib::vec3 cameraUp = MathLib::vec3(0.0f, 1.0f, 0.0f);

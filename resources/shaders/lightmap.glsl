@@ -113,7 +113,7 @@ void main()
 	const float width = 800.0f;
 	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
     float prev_depth = color.x;
-    float new_depth = pow(gl_FragCoord.z, 40);
+    float new_depth = pow(gl_FragCoord.z, 100);
 
 	vec3 result = vec3(0.0f);
     const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
