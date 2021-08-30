@@ -413,7 +413,8 @@ int main() {
 
 	// Model temple("../resources/models/Raanipokhari_stone base.obj");
 	std::cout << "Started\n";
-	Model temple("../resources/models/RaanipokhariWithtree.obj");
+	// Model temple("../resources/models/RaanipokhariWithtree.obj");
+	Model compound("../resources/models/compoundwithtree.obj");
 	std::cout << "Finished\n";
 	Model templeOnly("../resources/models/mandir.obj");
 	Model stone("../resources/models/stone.obj");
@@ -447,7 +448,7 @@ int main() {
 		skyBoxShader.setUniform("view", view);
 		skyBoxShader.setUniform("projection", projection);
 		skyBox.bind();
-		renderer.draw(skyBoxVA, skyBoxShader, 36);
+		// renderer.draw(skyBoxVA, skyBoxShader, 36);
 		glDepthMask(GL_TRUE);
 		skyBoxShader.unbind();
 
@@ -499,12 +500,12 @@ int main() {
 
 
 		lightning.setUniform("model", model * trans);
-		glDisable(GL_CLIP_DISTANCE0);
 		lightning.setUniform("plane", 0, -1, 0, 30);
 		lightning.setUniform("isReflection", static_cast<int>(0));
 
 		//translate
-		temple.render(lightning, true);
+		templeOnly.render(lightning, true);
+		compound.render(lightning, true);
 		reflect = MathLib::mat4(1.0f);
 		// reflect[1][1] = -1.0f;
 		reflect = reflect*trans;
@@ -517,6 +518,8 @@ int main() {
 		lightning.setUniform("model", model * reflect);
 		lightning.setUniform("isReflection", static_cast<int>(1));
 		templeOnly.render(lightning, true);
+		compound.render(lightning, true);
+
 
 
 
@@ -566,7 +569,7 @@ int main() {
 		lampShader.bind();
 		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
 		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(0.25f));
+		modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
 		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
 		lampShader.setUniform("model", modelSun);
 		lampShader.setUniform("projection", projection);
