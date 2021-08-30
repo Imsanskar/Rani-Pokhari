@@ -49,7 +49,7 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos){
     float xOffset = xPos - Renderer::previousX;
     float yOffset = Renderer::previousY - yPos;
 
-    const float sensitivity = 0.1f;
+    const float sensitivity = context->sensitivity;
 
     Renderer::previousX = xPos;
     Renderer::previousY = yPos;

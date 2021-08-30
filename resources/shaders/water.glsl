@@ -114,7 +114,7 @@ uniform sampler2D reflectionTexture;
 uniform float moveFactor;
 
 //lights for open gl
-#define waveStrength 0.15
+#define waveStrength 0.3
 #define NR_POINT_LIGHTS 20 
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
