@@ -5,7 +5,6 @@ layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aTexCoords;
 
 
-uniform mat4 trans;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -114,7 +113,7 @@ void main()
 	const float width = 800.0f;
 	vec4 color = texture(depthBuffer,gl_FragCoord.xy/width);
     float prev_depth = color.x;
-    float new_depth = pow(gl_FragCoord.z, 70);
+    float new_depth = pow(gl_FragCoord.z, 40);
 
 	vec3 result = vec3(0.0f);
     const vec4 col_diffuse_1 = texture(material.diffuse1, TexCoords);
@@ -157,7 +156,7 @@ void main()
 		alphaValue = 0.5f;
 		result *= vec3(0.6); 
 	}
-    if (new_depth <= prev_depth + 0.0020f){
+    if (new_depth <= prev_depth + 0.0032f){
   	  FragColor = vec4(result, alphaValue);
 	}
 	else{

@@ -54,10 +54,10 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-extern "C"
-{
-	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-}
+// extern "C"
+// {
+// 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+// }
 
 
 void setLightPosition(Shader& lightning){
@@ -297,7 +297,7 @@ int main() {
 	std::string str((char*)vendor);
 	if (str.find("ATI") != std::string::npos) {
 		std::cout << "Use other card unless you want to get bsod";
-		exit(-1);
+		// exit(-1);
 	}
 
 	//For blending, i.e. for textures with RGBA values
@@ -314,87 +314,19 @@ int main() {
 	Texture dudv("../resources/textures/dudv.png");
 
 
-	//vertices for skybox
-	float skyboxVertices[] = {
-		// positions          
-		-1.0f,  1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		-1.0f,  1.0f, -1.0f,
-		1.0f,  1.0f, -1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		1.0f, -1.0f,  1.0f
-	};
-
-	//cube map path
-	const CubeMap skyBox(std::vector<std::string>{
-		"../resources/skybox/right.jpg",
-			"../resources/skybox/left.jpg",
-			"../resources/skybox/top.jpg",
-			"../resources/skybox/bottom.jpg",
-			"../resources/skybox/front.jpg",
-			"../resources/skybox/back.jpg"});
-
-
-	//shader for skybox
-	Shader skyBoxShader("../resources/shaders/cubeMap.shader");
-	skyBoxShader.bind();
-	VertexBuffer skyBoxVB(skyboxVertices, sizeof(skyboxVertices));
-	VertexBufferLayout skyBoxLayout;
-	skyBoxLayout.push<float>(3);
-	VertexArray skyBoxVA;
-	skyBoxVA.addBuffer(skyBoxVB, skyBoxLayout);
-
 	
 
 	//projection matrix
 	MathLib::mat4 projection;
+	MathLib::mat4 view = MathLib::mat4(MathLib::mat3(renderer.camera.GetLookAtMatrix()));
 	float fov = 45.0f;
 	projection = MathLib::perspective(to_radians(fov), (float)width / (float)height, 0.00000001f, 100.0f);
 
 	//reflection matrix
 	MathLib::mat4 reflect(1.0f);
-
-
-	//skybox shader uniform
-	skyBoxShader.bind();
 	
 	//camera
-	MathLib::vec3 cameraPos = MathLib::vec3(0.0f, 60.0f,100.0f);
+	MathLib::vec3 cameraPos = MathLib::vec3(-0.605878,8.59639,19.1869);
 	// MathLib::vec3 cameraPos = MathLib::vec3(54.11,3.92044,-55.4537);
 	MathLib::vec3 cameraFront = MathLib::vec3(0.0f, 0.0f, -1.0f);
 	MathLib::vec3 cameraUp = MathLib::vec3(0.0f, 1.0f, 0.0f);
@@ -438,6 +370,7 @@ int main() {
   auto zvertex  = CompileAndLogShader("../resources/shaders/zvertex.glsl",GL_VERTEX_SHADER);
   glAttachShader(zprogram,zvertex);
   zrender.attachDepthFragment(zprogram);
+  glEnable(GL_CULL_FACE);
 
 	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
@@ -451,24 +384,14 @@ int main() {
 		renderer.clear(GL_COLOR_BUFFER_BIT);
 	    zrender.clearBG(0.0f, 0.0f, 0.0f, 1.0f);
 	    zrender.clearDepth();
-
-		glDepthMask(GL_FALSE);
-		//skybox
-		skyBoxShader.bind();
-		MathLib::mat4 view = MathLib::mat4(MathLib::mat3(renderer.camera.GetLookAtMatrix()));
-		skyBoxShader.setUniform("view", view);
-		skyBoxShader.setUniform("projection", projection);
-		skyBox.bind();
-		// renderer.draw(skyBoxVA, skyBoxShader, 36);
-		glDepthMask(GL_TRUE);
-		skyBoxShader.unbind();
 		
 		
 		float angle = 0.0f;
-		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.1f, 1000.0f);
+		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.001f, 1000.0f);
 		MathLib::mat4 trans = MathLib::mat4(1.0f);
 		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
+		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
 		angle = 0.0f;
 		trans = MathLib::mat4(1.0f);
 		trans = MathLib::translate(trans, MathLib::vec3(0.0f, -2.5f, -2.0f));
@@ -481,48 +404,9 @@ int main() {
  	   update_uniform_matrix_4f("projection", zprogram, projection.value_ptr());//projection.value_ptr());
  	   update_uniform_matrix_4f("view", zprogram, view.value_ptr());
 
-		zrender.clearDepth();
 
 		//setting for models
 		float timeValue = (float)glfwGetTime();
-
-
-
-
-		waterShader.bind();
-		model = MathLib::mat4(1.0f);
-		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
-		angle = 0.0f;
-		trans = MathLib::mat4(1.0f);
-		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 0.8f, 0.0f));
-		// trans = MathLib::scale(trans, MathLib::vec3(0.4f, 0.4f, 0.4f));
-		//wave speed calculation
-		float waveSpeed = 0.04f;
-		moveFactor += waveSpeed * timeValue; 
-		waterShader.setUniform("model", model * trans);
-		waterShader.setUniform("projection", projection);
-		waterShader.setUniform("view", view);
-		waterShader.setUniform("material.shininess", 128.0f);
-		waterShader.setUniform("viewPos", camera.cameraPosition);
-		waterShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
-		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
-		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
-		waterShader.setUniform("light.position", sunpos);
-		waterShader.setUniform("isNightMode", context.isNightMode);
-		waterShader.setUniform("moveFactor",  timeValue * waveSpeed);
-
-		glActiveTexture(GL_TEXTURE0 + 1);
-		waterShader.setUniform("dudv", static_cast<int>(1));
-		dudv.bind(1);
-		glActiveTexture(GL_TEXTURE0 + 2);
-		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
-		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
-		setLightPosition(waterShader);
-		glCheckError(water.render(waterShader,zprogram, zrender, true));
-		waterShader.unbind();
-
-
-
 		lightning.bind();
 		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
@@ -531,14 +415,12 @@ int main() {
 		trans = MathLib::translate(trans, MathLib::vec3(0.0f, -2.5f, -2.0f));
 		
 	
-		float pt = int(timeValue) % 45*4;//converted 45 sec tie value to 180 degree to be use in light direction
 		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
-		lightning.setUniform("lightMatrix", model);
+		view = renderer.camera.GetLookAtMatrix();
 		lightning.setUniform("projection", projection);
 		lightning.setUniform("view", view);
 		lightning.setUniform("material.shininess", 64.0f);
 		lightning.setUniform("viewPos", camera.cameraPosition);
-
 		lightning.setUniform("isNightMode", (int)context.isNightMode);		
 
 		setLightPosition(lightning);
@@ -547,67 +429,17 @@ int main() {
 		lightning.setUniform("light.diffuse", 0.3f, 0.3f, 0.3f); // darken diffuse light a bit
 		lightning.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
 		lightning.setUniform("light.position", sunpos);
-
-		//write into framebuffer
-		// waterFBO.bindReflectionFrameBuffer();
-		// // reflect = MathLib::scale(reflect, MathLib::vec3(0.5, 0.5f, 0.0));
-		// reflect[1][1] = -1.0f;
-		// reflect = reflect * trans;
-		// lightning.setUniform("model", model * reflect);
-		// renderer.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// lightning.setUniform("plane", 0, 1, 0, -15);
-		// temple.render(lightning, true);
-		// waterFBO.unbind();
-
-
-		lightning.setUniform("model", model * trans);
-		lightning.setUniform("plane", 0, -1, 0, 30);
-		lightning.setUniform("isReflection", static_cast<int>(0));
-
-		//translate
-		templeOnly.render(lightning, true);
-		compound.render(lightning, true);
-		reflect = MathLib::mat4(1.0f);
-		// reflect[1][1] = -1.0f;
-		reflect = reflect*trans;
-		reflect = MathLib::translate(reflect, MathLib::vec3(0.0f, 5.3f, 2.0f));
-		reflect[1][1] *= -1.0f;
-
-		//view matrix for relflection so that the relection is fix
-		MathLib::mat4 reflectionView = MathLib::lookAt(MathLib::vec3(0, 10, 70), MathLib::vec3(-0.055, -0.011, -1.0), MathLib::vec3(0.0f, 1.0f, 0.0f)); 
-
-		lightning.setUniform("model", model * reflect);
-		lightning.setUniform("isReflection", static_cast<int>(1));
-		// templeOnly.render(lightning, true);
-		// compound.render(lightning, true);
-
-
-
-
-		//stone render after reflection
-		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 1.5f, 0.0));
 		lightning.setUniform("model", model * trans);
 		lightning.setUniform("isReflection", static_cast<int>(0));
-		// stone.render(lightning, zprogram, zrender, true);
 		lightning.unbind();
 
+	    glUseProgram(zprogram);
+		glBindFramebuffer(GL_FRAMEBUFFER,zrender.colorFBO);
+	    zrender.clearDepth();
 
+		templeOnly.render(lightning,zprogram, zrender, true);
+		compound.render(lightning,zprogram, zrender, true);
 
-
-		//////property of sun or lamp
-		lampShader.bind();
-		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
-		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
-		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
-		lampShader.setUniform("model", modelSun);
-		lampShader.setUniform("projection", projection);
-		lampShader.setUniform("view", view);
-		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
-		//render the sun only in day mode
-		if(!context.isNightMode)
-			// glCheckError(sun.render(lampShader,zprogram, zrender,  true));
-		lampShader.unbind();
 
 		zrender.draw();
 		glfwSwapBuffers(window);
