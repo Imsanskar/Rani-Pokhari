@@ -372,6 +372,8 @@ int main() {
   zrender.attachDepthFragment(zprogram);
   glEnable(GL_CULL_FACE);
 
+	MathLib::mat4 trans = MathLib::mat4(1.0f);
+	MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 	// glViewport(0, 0, width, height);
 	while (!glfwWindowShouldClose(window)) {
 		if(context.logMode){
@@ -388,8 +390,45 @@ int main() {
 		
 		float angle = 0.0f;
 		projection = MathLib::perspective(to_radians(context.fov), aspectRatio, 0.001f, 1000.0f);
-		MathLib::mat4 trans = MathLib::mat4(1.0f);
-		MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+
+
+		waterShader.bind();
+		model = MathLib::mat4(1.0f);
+		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
+		angle = 0.0f;
+		trans = MathLib::mat4(1.0f);
+		trans = MathLib::translate(trans, MathLib::vec3(0.0f, 0.8f, 0.0f));
+		//wave speed calculation
+		float timeValue = (float)glfwGetTime();
+		float waveSpeed = 0.04f;
+		moveFactor += waveSpeed * timeValue; 
+		waterShader.setUniform("model", model * trans);
+		waterShader.setUniform("projection", projection);
+		waterShader.setUniform("view", view);
+		waterShader.setUniform("material.shininess", 128.0f);
+		waterShader.setUniform("viewPos", camera.cameraPosition);
+		waterShader.setUniform("light.ambient", AMBIENT);
+		waterShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+		waterShader.setUniform("light.specular", SPECULAR, SPECULAR,SPECULAR);
+		waterShader.setUniform("light.position", sunpos);
+		waterShader.setUniform("isNightMode", context.isNightMode);
+		waterShader.setUniform("moveFactor",  timeValue * waveSpeed);
+
+		glActiveTexture(GL_TEXTURE0 + 1);
+		waterShader.setUniform("dudv", static_cast<int>(1));
+		dudv.bind(1);
+		glActiveTexture(GL_TEXTURE0 + 2);
+		waterShader.setUniform("reflectionTexture", static_cast<int>(2));
+		glBindTexture(GL_TEXTURE_2D, waterFBO.reflectionFrameBuffer.renderedTexture);
+		setLightPosition(waterShader);
+		glCheckError(water.render(waterShader,zprogram, zrender, true));
+		waterShader.unbind();
+
+
+
+
+		model = MathLib::mat4(1.0f);
+		trans = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));
 		model = MathLib::translate(model, MathLib::vec3(0.0f, 3.0f, 0.0f));
 		angle = 0.0f;
@@ -406,7 +445,6 @@ int main() {
 
 
 		//setting for models
-		float timeValue = (float)glfwGetTime();
 		lightning.bind();
 		model = MathLib::mat4(1.0f);
 		model = MathLib::rotate(model, to_radians(angle), MathLib::vec3(0.5f, -0.5f, 0.5f));

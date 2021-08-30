@@ -189,7 +189,7 @@ public:
 			"#version 330 core\n out vec4 color;\n uniform sampler2D zbuffer;\n";
 		fragmentShaderSource += "float width = " + std::to_string(width) + ";\nfloat height = " + std::to_string(height) + ";\n";
 		fragmentShaderSource +=
-			"void main() \n {color = texture(zbuffer, vec2(gl_FragCoord.xy/800.0f));\n float old = color.x;\n float new = pow(gl_FragCoord.z,40);\n if (new <= old)\n color = vec4(vec3(new),1.0f);\n else \n color = vec4(vec3(old),1.0f); \n}";
+			"void main() \n {color = texture(zbuffer, vec2(gl_FragCoord.xy/800.0f));\n float old = color.x;\n float new = pow(gl_FragCoord.z,100);\n if (new <= old)\n color = vec4(vec3(new),1.0f);\n else \n color = vec4(vec3(old),1.0f); \n}";
 
 		// Don't know if it works .. let's see
 		GLuint fragmentShader;
