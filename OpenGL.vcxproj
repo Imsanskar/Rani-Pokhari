@@ -138,7 +138,7 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc142-mtd.lib;assimp.lib;zlib.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)build\assimp.exe" copy "$(SolutionDir)Dependencies\lib\assimpd.exe" "$(SolutionDir)build\assimp.exe"
+      <Command>if not exist "$(SolutionDir)build\assimp.exe" copy "$(SolutionDir)Dependencies\lib\assimp.exe" "$(SolutionDir)build\assimp.exe"
 if not exist "$(SolutionDir)build\zlib.dll" copy "$(SolutionDir)Dependencies\lib\zlib.dll" "$(SolutionDir)build\zlib.dll"
 if not exist "$(SolutionDir)build\assimp-vc142-mtd.dll" copy "$(SolutionDir)Dependencies\lib\assimp-vc142-mtd.dll" "$(SolutionDir)build\assimp-vc142-mtd.dll"</Command>
     </PostBuildEvent>
@@ -161,7 +161,7 @@ if not exist "$(SolutionDir)build\assimp-vc142-mtd.dll" copy "$(SolutionDir)Depe
       <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc142-mt.lib;assimp.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)build\assimp.exe" copy "$(SolutionDir)Dependencies\lib\assimpd.exe" "$(SolutionDir)build\assimp.exe"
+      <Command>if not exist "$(SolutionDir)build\assimp.exe" copy "$(SolutionDir)Dependencies\lib\assimp.exe" "$(SolutionDir)build\assimp.exe"
 if not exist "$(SolutionDir)build\zlib.dll" copy "$(SolutionDir)Dependencies\lib\zlib.dll" "$(SolutionDir)build\zlib.dll"
 if not exist "$(SolutionDir)build\assimp-vc142-mtd.dll" copy "$(SolutionDir)Dependencies\lib\assimp-vc142-mtd.dll" "$(SolutionDir)build\assimp-vc142-mtd.dll"</Command>
     </PostBuildEvent>
