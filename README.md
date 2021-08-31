@@ -7,6 +7,7 @@ This project is done as the fulfillment of requirements for completion of Comput
 -  Graphics API : OpenGL 4.4
 -  Library : GLFW, ASSIMP
 -  OpenGL Loader: GLAD
+- Build system: Solution file(Visual Studio), CMake & Makefile(build.bat)
 
 ### Build Process(Windows)
 
@@ -23,12 +24,15 @@ You either need to use ```x64 Command prompt for VS``` or need to install ```cla
 
 ### Output
 ![vs](screenshots/ranipokhari-side.png)
+![ranipokhari-1](screenshots/ranipokhari-1.png)
+![ranipokhari-1](screenshots/ranipokhari-2.png)
 
 ### Controls
 ```]```- increase the speed of keyboard  
 ```[```- decrease the speed of keyboard  
 ```n```- Night Mode  
-```m```- Day mode
+```m```- Day mode  
+```W A S D```- For movement 
 
 ### Note
 If you are using AMD GPU, you may have certain problems, so to use dedicated GPU please put the following code above ```main``` function.
