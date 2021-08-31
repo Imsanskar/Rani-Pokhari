@@ -30,6 +30,17 @@ You either need to use ```x64 Command prompt for VS``` or need to install ```cla
 ```n```- Night Mode  
 ```m```- Day mode
 
+### Note
+If you are using AMD GPU, you may have certain problems, so to use dedicated GPU please put the following code above ```main``` function.
+```
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+```
+However if you integrated GPU is not AMD then you may not have any problems.
+
+
 ### Developers
 [Sanskar Amgain](https://github.com/Imsanskar)  
 [Sagar Timalsina](https://github.com/sgr45)  

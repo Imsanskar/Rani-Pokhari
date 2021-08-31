@@ -53,10 +53,6 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-extern "C"
-{
-	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-}
 
 
 void setLightPosition(Shader& lightning){
@@ -293,11 +289,11 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-	std::string str((char*)vendor);
-	if (str.find("ATI") != std::string::npos) {
-		std::cout << "Use other card unless you want to get bsod";
-		exit(-1);
-	}
+	// std::string str((char*)vendor);
+	// if (str.find("ATI") != std::string::npos) {
+	// 	std::cout << "Use other card unless you want to get bsod";
+	// 	exit(-1);
+	// }
 
 	//For blending, i.e. for textures with RGBA values
 	glEnable(GL_BLEND);

@@ -33,7 +33,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 	set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib")
 	if(${CMAKE_BUILD_TYPE} MATCHES "Release")
-		set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib assimp.lib zlibstatic.lib zlib.lib")
+		set(ASSIMP_LINK_LIB "assimp-vc142-mt.lib")
 	elseif(${CMAKE_BUILD_TYPE} MATCHES "Debug")
 		set(ASSIMP_LINK_LIB "assimp-vc142-mtd.lib")
 	endif(${CMAKE_BUILD_TYPE} MATCHES "Release")
@@ -41,7 +41,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	message(${ASSIMP_LINK_LIB})
 
 	add_executable(RaniPokhari src/main.cpp ${SRC} ${INCLUDES})
-	target_link_libraries(RaniPokhari glfw3.lib opengl32 ${ASSIMP_LINK_LIB})
+	target_link_libraries(RaniPokhari glfw3.lib opengl32 ${ASSIMP_LINK_LIB} assimp.lib zlibstatic.lib zlib.lib)
 
 
 
