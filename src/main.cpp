@@ -53,10 +53,6 @@ MathLib::vec3 pointLightsPositions[] = {
 	MathLib::vec3(-1.52, 7.35, -1.89),//left
 }; 
 
-extern "C"
-{
-	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-}
 
 
 void setLightPosition(Shader& lightning){
@@ -293,11 +289,11 @@ int main() {
 	const GLubyte* rendererData = glGetString(GL_RENDERER); // Returns a hint to the model
 	std::cout << "Vendor:" << vendor << "   " << "Graphics card:" << rendererData << std::endl;
 
-	std::string str((char*)vendor);
-	if (str.find("ATI") != std::string::npos) {
-		std::cout << "Use other card unless you want to get bsod";
-		exit(-1);
-	}
+	// std::string str((char*)vendor);
+	// if (str.find("ATI") != std::string::npos) {
+	// 	std::cout << "Use other card unless you want to get bsod";
+	// 	exit(-1);
+	// }
 
 	//For blending, i.e. for textures with RGBA values
 	glEnable(GL_BLEND);
@@ -566,20 +562,21 @@ int main() {
 		waterShader.unbind();
 
 		//////property of sun or lamp
-		lampShader.bind();
-		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
-		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
-		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
-		lampShader.setUniform("model", modelSun);
-		lampShader.setUniform("projection", projection);
-		lampShader.setUniform("view", view);
-		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
-		//render the sun only in day mode
-		if(!context.isNightMode)
-			glCheckError(sun.render(lampShader, true));
-		lampShader.unbind();
-
+		if(!context.isNightMode){
+			lampShader.bind();
+			MathLib::mat4 modelSun = MathLib::mat4(1.0f);
+			modelSun = MathLib::translate(modelSun, sunpos);
+			modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
+			MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
+			lampShader.setUniform("model", modelSun);
+			lampShader.setUniform("projection", projection);
+			lampShader.setUniform("view", view);
+			lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
+			//render the sun only in day mode
+			if(!context.isNightMode)
+				glCheckError(sun.render(lampShader, true));
+			lampShader.unbind();
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
