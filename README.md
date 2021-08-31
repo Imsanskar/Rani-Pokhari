@@ -25,9 +25,9 @@ You either need to use ```x64 Command prompt for VS``` or need to install ```cla
 ![vs](screenshots/ranipokhari-side.png)
 
 ### Controls
-```]```- increase the speed of keyboard
+```]```- increase the speed of keyboard  
 ```[```- decrease the speed of keyboard  
-```n```- Night Mode
+```n```- Night Mode  
 ```m```- Day mode
 
 ### Developers
