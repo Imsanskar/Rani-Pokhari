@@ -566,20 +566,21 @@ int main() {
 		waterShader.unbind();
 
 		//////property of sun or lamp
-		lampShader.bind();
-		MathLib::mat4 modelSun = MathLib::mat4(1.0f);
-		modelSun = MathLib::translate(modelSun, sunpos);
-		modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
-		MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
-		lampShader.setUniform("model", modelSun);
-		lampShader.setUniform("projection", projection);
-		lampShader.setUniform("view", view);
-		lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
-		//render the sun only in day mode
-		if(!context.isNightMode)
-			glCheckError(sun.render(lampShader, true));
-		lampShader.unbind();
-
+		if(!context.isNightMode){
+			lampShader.bind();
+			MathLib::mat4 modelSun = MathLib::mat4(1.0f);
+			modelSun = MathLib::translate(modelSun, sunpos);
+			modelSun = MathLib::scale(modelSun, MathLib::vec3(4.25f));
+			MathLib::mat4 transformationSun = MathLib::mat4(1.0f);
+			lampShader.setUniform("model", modelSun);
+			lampShader.setUniform("projection", projection);
+			lampShader.setUniform("view", view);
+			lampShader.setUniform("lightColour", 1.0f, 1.0f, 1.0f);
+			//render the sun only in day mode
+			if(!context.isNightMode)
+				glCheckError(sun.render(lampShader, true));
+			lampShader.unbind();
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
