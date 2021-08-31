@@ -371,6 +371,7 @@ int main() {
   glAttachShader(zprogram,zvertex);
   zrender.attachDepthFragment(zprogram);
   glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
 
 	MathLib::mat4 trans = MathLib::mat4(1.0f);
 	MathLib::mat4 model = MathLib::mat4(1.0f); // make sure to initialize matrix to identity matrix first
