@@ -54,9 +54,9 @@ if %ERRORLEVEL% NEQ 0 goto CompileError
 goto Run
 
 :Run
-if not exist "assimp.exe" copy "..\Dependencies\lib\Debug\assimp.exe" "assimp.exe"
-if not exist "assimp-vc142-mtd.dll" copy "..\Dependencies\lib\Debug\assimp-vc142-mtd.dll" "assimp-vc142-mtd.dll"
-if not exist "zlib.dll" copy "..\Dependencies\lib\Debug\zlib.dll" "zlib.dll"
+if not exist "assimp.exe" copy "..\Dependencies\lib\assimp.exe" "assimp.exe"
+if not exist "assimp-vc142-mtd.dll" copy "..\Dependencies\lib\assimp-vc142-mtd.dll" "assimp-vc142-mtd.dll"
+if not exist "zlib.dll" copy "..\Dependencies\lib\zlib.dll" "zlib.dll"
 RaniPokhari.exe
 goto Done
 

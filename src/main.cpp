@@ -413,7 +413,6 @@ int main() {
 	Model compound("../resources/models/compoundwithtree.obj");
 	std::cout << "Finished\n";
 	Model templeOnly("../resources/models/mandir.obj");
-	Model stone("../resources/models/stone.obj");
 	Model water("../resources/models/water.obj");
 	Model sun("../resources/models/sun.obj");
 
